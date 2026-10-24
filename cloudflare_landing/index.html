@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>MONOLITH &bull; Autonomous Engineering System</title>
+  
+  <!-- Meta Descriptions & SEO -->
+  <meta name="description" content="MONOLITH — Autonomous Engineering System. One system. Every intelligence. Total control. Local-first, privacy-governed multi-agent software engineering, Playwright browser automation, and Pinterest media ingestion platform." />
+  <meta name="keywords" content="MONOLITH, Autonomous Engineering System, Multi-Agent SDLC, Local-First AI, Playwright Chromium, Air-Gapped AI, Ollama, Antigravity" />
+  <meta name="author" content="MONOLITH Systems" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="MONOLITH &bull; Autonomous Engineering System" />
+  <meta property="og:description" content="One system. Every intelligence. Total control. Local-first autonomous multi-agent engineering & browser automation platform." />
+  <meta property="og:image" content="/static/favicon.svg" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="MONOLITH &bull; Autonomous Engineering System" />
+  <meta name="twitter:description" content="One system. Every intelligence. Total control." />
+
+  <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=2" />
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico?v=2" />
+  <link rel="shortcut icon" href="/static/favicon.ico?v=2" />
+
+  <!-- Google Fonts: Orbitron & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <!-- Master Design System Stylesheet -->
+  <link rel="stylesheet" href="./style.css" />
+
+  <!-- JSON-LD Semantic Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "MONOLITH — Autonomous Engineering System",
+    "operatingSystem": "Windows 10/11, Linux, macOS",
+    "applicationCategory": "DeveloperApplication",
+    "offers": {
+      "@type": "Offer",
+      "price": "0.00",
+      "priceCurrency": "USD"
+    },
+    "description": "A local-first, zero-subscription autonomous software engineering system powered by multi-agent SDLC orchestration, Playwright Chromium browser automation, CookieVault SSO, and a cryptographic SHA-256 Merkle audit ledger.",
+    "featureList": [
+      "100% Air-Gapped Local Model Execution with Ollama",
+      "Multi-Agent SDLC Requirements, Architecture ADRs & Code Review",
+      "Headed Playwright Browser Automation & Pinterest Video Ingestion",
+      "Encrypted CookieVault with Zero-OTP Rehydration",
+      "Local Vector RAG & Dual-Engine OCR",
+      "Tamper-Evident SHA-256 Chained Merkle Audit Ledger"
+    ]
+  }
+  </script>
+</head>
+<body id="top">
+
+  <!-- Ambient Animated Lighting & Grid Layers -->
+  <div class="bg-ambient-layer" aria-hidden="true">
+    <div class="bg-ambient-glow-1"></div>
+    <div class="bg-ambient-glow-2"></div>
+    <div class="bg-ambient-glow-3"></div>
+    <div class="bg-grid-overlay"></div>
+  </div>
+
+  <!-- Header & Sticky Navigation -->
+  <header class="header-nav">
+    <nav class="nav-inner" aria-label="Main Navigation">
+      <a href="/" class="brand-wrapper" aria-label="MONOLITH Home" style="text-decoration: none;">
+        <div class="brand-icon" style="background: none; border: none;">
+          <!-- Monolith Faceted Prism Logo -->
+          <svg class="monolith-logo-icon" viewBox="0 0 48 48" style="width: 34px; height: 34px; filter: drop-shadow(0 0 10px rgba(99,102,241,0.55));">
+            <defs>
+              <linearGradient id="lndMonoLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FFFFFF"/>
+                <stop offset="35%" stop-color="#D1D5DB"/>
+                <stop offset="100%" stop-color="#334155"/>
+              </linearGradient>
+              <linearGradient id="lndMonoRight" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#A5B4FC"/>
+                <stop offset="50%" stop-color="#6366F1"/>
+                <stop offset="100%" stop-color="#8B5CF6"/>
+              </linearGradient>
+            </defs>
+            <path d="M23 4 L11 11 L11 37 L23 44 Z" fill="url(#lndMonoLeft)"/>
+            <path d="M25 4 L37 11 L37 37 L25 44 Z" fill="url(#lndMonoRight)"/>
+          </svg>
+        </div>
+        <div class="brand-meta">
+          <div class="brand-title" style="font-family: 'Orbitron', sans-serif; letter-spacing: 0.14em; font-weight: 800;">
+            MONOLITH <span class="brand-badge">AES</span>
+          </div>
+          <span class="brand-sub" style="letter-spacing: 0.08em; text-transform: uppercase;">Autonomous Engineering System</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <div class="nav-links">
+        <a href="#overview">Overview</a>
+        <a href="#simulators">Simulators</a>
+        <a href="#calculator">Developer Velocity</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#faq">FAQ</a>
+      </div>
+
+      <!-- Header Action Controls -->
+      <div class="nav-actions">
+        <!-- Theme Toggle Button -->
+        <button class="icon-btn" id="themeToggleBtn" aria-label="Toggle Theme Mode" title="Toggle Dark / Light Mode">
+          <svg class="svg-icon" id="themeIcon" viewBox="0 0 24 24" width="20" height="20">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+
+        <a href="https://github.com/Gulshan-Singh-gs/monolith" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="text-decoration: none;">
+          <span>Launch MONOLITH Studio</span>
+          <svg class="svg-icon" viewBox="0 0 24 24" width="16" height="16">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button class="icon-btn mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle Navigation Menu" title="Toggle Navigation Menu">
+          <svg class="svg-icon" id="mobileMenuIcon" viewBox="0 0 24 24" width="20" height="20">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile Dropdown Drawer -->
+      <div class="mobile-nav-drawer" id="mobileNavDrawer" aria-label="Mobile Navigation">
+        <a href="#overview">Overview</a>
+        <a href="#simulators">Simulators</a>
+        <a href="#calculator">Developer Velocity</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#faq">FAQ</a>
+        <a href="https://github.com/Gulshan-Singh-gs/monolith" target="_blank" rel="noopener noreferrer" style="color: var(--accent-primary-light);">Launch MONOLITH Studio &rarr;</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main-content">
+
+    <!-- ==================================================================
+         HERO SECTION: THE FLAGSHIP ANNOUNCEMENT
+         ================================================================== -->
+    <section class="hero-section" id="overview">
+      <!-- Chromatic Aberration WebGL Sine Wave (Three.js Hero Background) -->
+      <div class="hero-canvas-container" aria-hidden="true">
+        <canvas id="hero-chromatic-canvas" class="hero-chromatic-canvas"></canvas>
+      </div>
+
+      <div class="container hero-inner">
+
+
+
+        <!-- Monumental WebGL Liquid Distortion Typography: MONOLITH -->
+        <div class="monolith-liquid-typo-wrap" id="monolithLiquidTypoWrap" role="img" aria-label="MONOLITH">
+          <canvas id="monolith-liquid-canvas" class="monolith-liquid-canvas"></canvas>
+        </div>
+
+        <h1 class="hero-title" style="font-family: 'Orbitron', sans-serif;">
+          One System. Every Intelligence. <br />
+          <span class="gradient-text">Total Control.</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          The local-first autonomous engineering system. Run end-to-end SDLC pipelines—Requirements, Architecture ADRs, Code Review, Pytest suites, and Threat Modeling—with local Ollama models, headed Playwright browser automation, CookieVault SSO, and a tamper-evident SHA-256 Merkle audit ledger.
+        </p>
+
+        <!-- CTA Action Hub -->
+        <div class="hero-cta-group">
+          <a href="https://github.com/Gulshan-Singh-gs/monolith" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-large" style="text-decoration: none;">
+            <svg class="svg-icon" viewBox="0 0 24 24" width="20" height="20">
+              <polyline points="4 17 10 11 4 5"></polyline>
+              <line x1="12" y1="19" x2="20" y2="19"></line>
+            </svg>
+            <span>Launch MONOLITH Studio</span>
+          </a>
+
+          <a href="#simulators" class="btn btn-secondary btn-large" style="text-decoration: none;">
+            <svg class="svg-icon" viewBox="0 0 24 24" width="20" height="20">
+              <line x1="4" y1="21" x2="4" y2="14"></line>
+              <line x1="4" y1="10" x2="4" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12" y2="3"></line>
+              <line x1="20" y1="21" x2="20" y2="16"></line>
+              <line x1="20" y1="12" x2="20" y2="3"></line>
+              <line x1="1" y1="14" x2="7" y2="14"></line>
+              <line x1="9" y1="8" x2="15" y2="8"></line>
+              <line x1="17" y1="16" x2="23" y2="16"></line>
+            </svg>
+            <span>Explore Interactive Simulators</span>
+          </a>
+        </div>
+
+        <!-- System Capability Metrics Bar -->
+        <div class="hero-stats-grid">
+          <div class="stat-card">
+            <div class="stat-num" style="color: var(--accent-emerald);">0 ms</div>
+            <div class="stat-label">Cloud Egress (Air-Gap Mode)</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" style="color: var(--accent-primary-light);">$0.00</div>
+            <div class="stat-label">API Bills (Local Ollama Engine)</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" style="color: var(--accent-cyan-light);">28x</div>
+            <div class="stat-label">Multi-Agent SDLC Velocity</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" style="color: var(--accent-saffron);">100%</div>
+            <div class="stat-label">SHA-256 Merkle Chained Ledger</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         INTERACTIVE SIMULATOR CENTER (4 LIVE TABS)
+         ================================================================== -->
+    <section class="sim-section" id="simulators">
+      <div class="container">
+        
+        <div class="section-header">
+          <span class="section-tag">
+            <span class="pulse-dot-violet"></span>
+            <span>Interactive Architecture Lab</span>
+          </span>
+          <h2 class="section-title">Experience <span class="gradient-text">MONOLITH</span> in Action</h2>
+          <p class="section-subtitle">
+            Interact with our live browser automation engine, multi-agent SDLC synthesizer, cryptographic Merkle ledger, and air-gap boundary guard in real-time.
+          </p>
+        </div>
+
+        <div class="terminal-container">
+          <!-- Terminal Tab Navigation -->
+          <div class="sim-tab-bar" role="tablist">
+            <button class="sim-tab-btn active" data-tab="sdlc" role="tab">
+              <svg class="svg-icon" viewBox="0 0 24 24" width="18" height="18">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+              <span>Multi-Agent SDLC</span>
+            </button>
+            <button class="sim-tab-btn" data-tab="browser" role="tab">
+              <svg class="svg-icon" viewBox="0 0 24 24" width="18" height="18">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              </svg>
+              <span>Playwright &amp; Media Ingestion</span>
+            </button>
+            <button class="sim-tab-btn" data-tab="airgap" role="tab">
+              <svg class="svg-icon" viewBox="0 0 24 24" width="18" height="18">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+              <span>Air-Gap Kill Switch</span>
+            </button>
+            <button class="sim-tab-btn" data-tab="ledger" role="tab">
+              <svg class="svg-icon" viewBox="0 0 24 24" width="18" height="18">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+              </svg>
+              <span>Merkle Audit Ledger</span>
+            </button>
+          </div>
+
+          <!-- TAB 1: Multi-Agent SDLC Synthesizer -->
+          <div class="sim-tab-content active" id="tab-sdlc" role="tabpanel">
+            <div class="sdlc-sim-grid">
+              <div>
+                <div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 0.6rem; color: var(--text-primary);">
+                  Select Repository Blueprint:
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <button class="sample-sdlc-btn active" data-sample="sample1">
+                    <strong>FinTech Payment Engine</strong>
+                    <span>PCI-DSS, Idempotency &amp; Saga Pattern</span>
+                  </button>
+                  <button class="sample-sdlc-btn" data-sample="sample2">
+                    <strong>Robotics Drone Fleet Controller</strong>
+                    <span>50Hz Telemetry, MAVLink &amp; Geofencing</span>
+                  </button>
+                  <button class="sample-sdlc-btn" data-sample="sample3">
+                    <strong>Distributed Vector Database</strong>
+                    <span>HNSW Index, SIMD AVX-512 &amp; Tiered Cache</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="sdlc-output-pane">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                  <h4 id="sdlcSimTitle" style="font-size: 0.98rem; color: var(--accent-primary-light); margin: 0;">
+                    FinTech Payment Orchestrator &amp; Multi-Rail Clearing Engine
+                  </h4>
+                  <span class="brand-badge" style="background: rgba(16,185,129,0.2); color: var(--accent-emerald-light);">5 Agents Active</span>
+                </div>
+
+                <div class="table-responsive">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Agent Persona</th>
+                        <th>Synthesized Artifact</th>
+                        <th>Specification Summary</th>
+                        <th>Quality Gate</th>
+                      </tr>
+                    </thead>
+                    <tbody id="sdlcMatrixBody">
+                      <tr>
+                        <td><strong style="color: var(--accent-primary-light);">Requirements Analyst</strong></td>
+                        <td><span class="brand-badge font-mono" style="font-size: 11px;">01_BRD.md</span></td>
+                        <td>Sub-second idempotency, PCI-DSS Level 1 compliance, ISO 20022 messaging</td>
+                        <td><span class="tag-monolith" style="color: var(--accent-emerald-light); font-weight: 700; font-size: 10px;">VERIFIED</span></td>
+                      </tr>
+                      <tr>
+                        <td><strong style="color: var(--accent-primary-light);">Architecture Strategist</strong></td>
+                        <td><span class="brand-badge font-mono" style="font-size: 11px;">11_ADR_Pipelining.md</span></td>
+                        <td>Event-driven Saga pattern with transactional outbox over Kafka</td>
+                        <td><span class="tag-monolith" style="color: var(--accent-emerald-light); font-weight: 700; font-size: 10px;">VERIFIED</span></td>
+                      </tr>
+                      <tr>
+                        <td><strong style="color: var(--accent-primary-light);">Code Reviewer &amp; Linter</strong></td>
+                        <td><span class="brand-badge font-mono" style="font-size: 11px;">payment_router.py</span></td>
+                        <td>AST analyzed: 0 cyclomatic complexity violations, strict typing enforced</td>
+                        <td><span class="tag-monolith" style="color: var(--accent-emerald-light); font-weight: 700; font-size: 10px;">VERIFIED</span></td>
+                      </tr>
+                      <tr>
+                        <td><strong style="color: var(--accent-primary-light);">QA Test Synthesizer</strong></td>
+                        <td><span class="brand-badge font-mono" style="font-size: 11px;">test_payment_suite.py</span></td>
+                        <td>Synthesized 48 unit &amp; boundary condition tests with 99.2% branch coverage</td>
+                        <td><span class="tag-monolith" style="color: var(--accent-emerald-light); font-weight: 700; font-size: 10px;">VERIFIED</span></td>
+                      </tr>
+                      <tr>
+                        <td><strong style="color: var(--accent-primary-light);">DevSecOps Specialist</strong></td>
+                        <td><span class="brand-badge font-mono" style="font-size: 11px;">12_Threat_Model.md</span></td>
+                        <td>STRIDE model generated: Replay attack &amp; race condition defenses validated</td>
+                        <td><span class="tag-monolith" style="color: var(--accent-emerald-light); font-weight: 700; font-size: 10px;">HARDENED</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 2: Playwright Browser Automation & Media Ingestion -->
+          <div class="sim-tab-content" id="tab-browser" role="tabpanel">
+            <div style="padding: 1rem 0.5rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-wrap: wrap; gap: 10px;">
+                <div>
+                  <h3 style="font-size: 1.15rem; color: var(--text-primary); margin-bottom: 4px;">Playwright Headed Chromium &amp; Media Ingestion</h3>
+                  <p style="font-size: 0.88rem; color: var(--text-secondary); margin: 0;">Automates web chatbots, reverse-engineers UI components, and streams Pinterest video downloads locally.</p>
+                </div>
+                <button class="btn btn-primary" id="btnSimulateBrowser" style="padding: 9px 20px; font-size: 13px;">
+                  <svg class="svg-icon" viewBox="0 0 24 24" width="16" height="16">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                  </svg>
+                  <span>Run Playwright Ingestion</span>
+                </button>
+              </div>
+
+              <!-- Simulator Progress -->
+              <div id="browserSimProgress" style="display: none; background: var(--bg-surface); border: 1px solid var(--border-medium); border-radius: var(--radius-md); padding: 16px; margin-bottom: 16px;">
+                <div style="display: flex; justify-content: space-between; font-size: 12.5px; margin-bottom: 8px;">
+                  <span id="browserSimStatus" style="color: var(--accent-primary-light); font-weight: 600;">Spawning Playwright Chromium instance...</span>
+                  <span class="tag-monolith" style="color: var(--accent-emerald-light);">LIVE CDP STREAM</span>
+                </div>
+                <div style="height: 8px; width: 100%; background: var(--bg-primary); border-radius: 4px; overflow: hidden;">
+                  <div id="browserSimProgressFill" style="height: 100%; width: 20%; background: linear-gradient(90deg, var(--accent-primary), var(--accent-emerald)); transition: width 0.3s ease;"></div>
+                </div>
+              </div>
+
+              <!-- Result Card -->
+              <div id="browserSimResult" style="display: none; background: var(--bg-surface); border: 1px solid var(--border-medium); border-radius: var(--radius-md); padding: 18px;">
+                <div style="display: flex; gap: 18px; align-items: center; flex-wrap: wrap;">
+                  <div style="width: 140px; height: 90px; border-radius: 8px; background: #020617; border: 1px solid var(--border-medium); display: grid; place-items: center; color: var(--accent-emerald);">
+                    <svg class="svg-icon" viewBox="0 0 24 24" width="32" height="32">
+                      <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+                      <line x1="7" y1="2" x2="7" y2="22"></line>
+                      <line x1="17" y1="2" x2="17" y2="22"></line>
+                      <line x1="2" y1="12" x2="22" y2="12"></line>
+                      <line x1="2" y1="7" x2="7" y2="7"></line>
+                      <line x1="2" y1="17" x2="7" y2="17"></line>
+                      <line x1="17" y1="17" x2="22" y2="17"></line>
+                      <line x1="17" y1="7" x2="22" y2="7"></line>
+                    </svg>
+                  </div>
+                  <div style="flex: 1; min-width: 240px;">
+                    <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 4px;">
+                      <span class="tag-monolith" style="color: var(--accent-emerald-light); font-weight: 700;">MP4 SAVED LOCALLY</span>
+                      <span style="font-size: 11px; color: var(--text-muted); font-family: var(--font-mono);">SHA-256: 7f3a9d12...c884</span>
+                    </div>
+                    <strong style="color: var(--text-primary); font-size: 14px;">pin_video_1080p_highres.mp4 (3.84 MB)</strong>
+                    <p style="margin: 4px 0 0; font-size: 12px; color: var(--text-secondary);">Saved to: <code>output/downloads/pin_video_1080p_highres.mp4</code></p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Feature Pills Grid -->
+              <div class="features-grid" style="margin-top: 1.2rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+                <div class="feature-item">
+                  <strong style="color: var(--text-primary);">CookieVault SSO</strong>
+                  <p style="font-size: 0.8rem; color: var(--text-secondary);">AES-GCM encrypted cookies inject pre-authenticated sessions into ChatGPT and Claude.</p>
+                </div>
+                <div class="feature-item">
+                  <strong style="color: var(--text-primary);">UI Component Inspector</strong>
+                  <p style="font-size: 0.8rem; color: var(--text-secondary);">Extracts computed Tailwind styles, Radix blueprints, and Three.js WebGL canvas buffers.</p>
+                </div>
+                <div class="feature-item">
+                  <strong style="color: var(--text-primary);">Pin Saver Sniffer</strong>
+                  <p style="font-size: 0.8rem; color: var(--text-secondary);">Direct network stream capture sniffing high-bitrate MP4 chunks into workspace folders.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 3: Air-Gap Kill Switch Simulator -->
+          <div class="sim-tab-content" id="tab-airgap" role="tabpanel">
+            <div class="airgap-sim-box">
+              <div class="airgap-controls">
+                <div class="toggle-control-group">
+                  <label class="switch-toggle" for="airgapToggle">
+                    <input type="checkbox" id="airgapToggle" aria-label="Toggle Air Gap Mode" />
+                    <span class="slider round"></span>
+                  </label>
+                  <div>
+                    <strong style="color: var(--text-primary); font-size: 0.95rem;">Outbound Egress Permission</strong>
+                    <div style="font-size: 0.78rem; color: var(--text-muted);">Toggle to permit external browser scrapers or enforce 100% air-gap.</div>
+                  </div>
+                </div>
+
+                <div class="status-indicator-box">
+                  <span class="brand-badge" id="airgapStatusBadge" style="background: rgba(16, 185, 129, 0.2); color: var(--accent-emerald-light); border-color: var(--accent-emerald);">
+                    AIR-GAP BOUNDARY ENFORCED
+                  </span>
+                </div>
+
+                <button class="btn btn-danger emergency-kill-btn" id="emergencyKillBtn" style="padding: 9px 18px; font-size: 12px;">
+                  <svg class="svg-icon" viewBox="0 0 24 24" width="16" height="16">
+                    <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+                    <line x1="12" y1="2" x2="12" y2="12"></line>
+                  </svg>
+                  <span>Trip Emergency Kill Switch</span>
+                </button>
+              </div>
+
+              <!-- Dynamic Telemetry Dashboard -->
+              <div class="telemetry-panel">
+                <div class="telemetry-row">
+                  <span class="telemetry-label">Active Inference Path:</span>
+                  <span class="telemetry-val font-mono" id="activeRouteDisplay" style="color: var(--accent-emerald-light);">
+                    Ollama Local Daemon (llama3.2:1b on Local GPU)
+                  </span>
+                </div>
+                <div class="telemetry-row">
+                  <span class="telemetry-label">Inference Round-Trip Latency:</span>
+                  <span class="telemetry-val font-mono" id="telemetryLatency">14 ms (Zero Round-Trip)</span>
+                </div>
+                <div class="telemetry-row">
+                  <span class="telemetry-label">Token Consumption Cost:</span>
+                  <span class="telemetry-val font-mono" id="telemetryCost">$0.00 / token (Free)</span>
+                </div>
+                <div class="telemetry-row">
+                  <span class="telemetry-label">Outbound Network Telemetry:</span>
+                  <span class="telemetry-val font-mono" id="telemetryLeak" style="color: var(--accent-emerald-light);">
+                    0.000 Bytes (100% On-Premise)
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 4: Merkle Ledger Simulator -->
+          <div class="sim-tab-content" id="tab-ledger" role="tabpanel">
+            <div style="padding: 0.5rem;">
+              <div class="ledger-controls-bar">
+                <span class="brand-badge" id="ledgerStatusBadge" style="background: rgba(99, 102, 241, 0.15); color: var(--accent-primary-light);">
+                  Ready for Verification
+                </span>
+                <div class="ledger-btns-group">
+                  <button class="btn btn-secondary" id="tamperLedgerBtn">
+                    <svg class="svg-icon" viewBox="0 0 24 24" width="14" height="14">
+                      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                      <line x1="12" y1="9" x2="12" y2="13"></line>
+                      <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    <span>Simulate Rogue Tamper</span>
+                  </button>
+                  <button class="btn btn-secondary" id="resetLedgerBtn">
+                    <svg class="svg-icon" viewBox="0 0 24 24" width="14" height="14">
+                      <polyline points="1 4 1 10 7 10"></polyline>
+                      <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                    </svg>
+                    <span>Reset</span>
+                  </button>
+                  <button class="btn btn-primary" id="verifyLedgerBtn">
+                    <svg class="svg-icon" viewBox="0 0 24 24" width="14" height="14">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                      <polyline points="9 12 11 14 15 10"></polyline>
+                    </svg>
+                    <span>Re-Verify Cryptographic Chain</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Blocks Grid -->
+              <div class="ledger-chain-grid">
+                <div class="ledger-block" id="ledgerBlock1">
+                  <div class="block-id">BLOCK #01 &bull; GENESIS</div>
+                  <div class="block-field"><span>Actor:</span> OPERATOR_PRIMARY</div>
+                  <div class="block-action">Workspace initialized: Local vector RAG index built</div>
+                  <div class="hash-field"><span>Prev Hash:</span> <span class="font-mono">0000000000...0000</span></div>
+                  <div class="hash-field"><span>SHA-256:</span> <span class="font-mono curr-hash">3d8b8e01...991a</span></div>
+                </div>
+
+                <div class="ledger-block" id="ledgerBlock2">
+                  <div class="block-id">BLOCK #02 &bull; ARCHITECTURE</div>
+                  <div class="block-field"><span>Actor:</span> ARCHITECT_AGENT</div>
+                  <div class="block-action">Generated Architecture ADR: ADR-004 Microservices Decoupling</div>
+                  <div class="hash-field"><span>Prev Hash:</span> <span class="font-mono">3d8b8e01...991a</span></div>
+                  <div class="hash-field"><span>SHA-256:</span> <span class="font-mono curr-hash">8a41bc91...f088</span></div>
+                </div>
+
+                <div class="ledger-block" id="ledgerBlock3">
+                  <div class="block-id">BLOCK #03 &bull; CODE REVIEW</div>
+                  <div class="block-field"><span>Actor:</span> CODE_REVIEWER_AGENT</div>
+                  <div class="block-action">Automated AST Security Scan passed: 0 vulnerabilities found</div>
+                  <div class="hash-field"><span>Prev Hash:</span> <span class="font-mono">8a41bc91...f088</span></div>
+                  <div class="hash-field"><span>SHA-256:</span> <span class="font-mono curr-hash">c4e20911...1419</span></div>
+                </div>
+
+                <div class="ledger-block" id="ledgerBlock4">
+                  <div class="block-id">BLOCK #04 &bull; DEPLOYMENT</div>
+                  <div class="block-field"><span>Actor:</span> DEPLOYMENT_ORCHESTRATOR</div>
+                  <div class="block-action">Container artifact signed &amp; deployment manifest recorded</div>
+                  <div class="hash-field"><span>Prev Hash:</span> <span class="font-mono">c4e20911...1419</span></div>
+                  <div class="hash-field"><span>SHA-256:</span> <span class="font-mono curr-hash">f089b271...001e</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         DEVELOPER VELOCITY & ROI CALCULATOR
+         ================================================================== -->
+    <!-- ==================================================================
+         DEVELOPER VELOCITY & ROI CALCULATOR (ENTERPRISE SOVEREIGN EDITION)
+         ================================================================== -->
+    <section class="roi-section" id="calculator">
+      <div class="container">
+        
+        <div class="section-header">
+          <div class="roi-header-badge">
+            <span class="roi-badge-dot"></span>
+            <span>ENTERPRISE ROI ENGINE &bull; REAL-TIME SDLC QUANTIFICATION</span>
+          </div>
+          <h2 class="section-title">Developer Velocity &amp; ROI Calculator</h2>
+          <p class="section-subtitle">
+            Quantify reclaimed engineering capacity, cloud token egress bills eradicated, and release acceleration by switching from manual or subscription AI tools to MONOLITH's local air-gapped system.
+          </p>
+        </div>
+
+        <!-- Preset Persona Quick-Select Pills -->
+        <div class="roi-presets-bar">
+          <span class="roi-presets-label">Team Archetypes:</span>
+          <div class="roi-presets-group">
+            <button type="button" class="roi-preset-btn active" data-preset="startup">
+              <span>Agile Startup <small>(5 Devs)</small></span>
+            </button>
+            <button type="button" class="roi-preset-btn" data-preset="scaleup">
+              <span>Growth Scaleup <small>(25 Devs)</small></span>
+            </button>
+            <button type="button" class="roi-preset-btn" data-preset="enterprise">
+              <span>Enterprise Core <small>(75 Devs)</small></span>
+            </button>
+            <button type="button" class="roi-preset-btn" data-preset="defense">
+              <span>Sovereign Defense <small>(150 Devs)</small></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="roi-calculator-container">
+          <!-- Left Column: Input Sliders & Assumptions -->
+          <div class="roi-inputs-panel">
+            <div class="roi-panel-header">
+              <div class="panel-title-wrap">
+                <svg class="svg-icon" viewBox="0 0 24 24" width="20" height="20">
+                  <line x1="4" y1="21" x2="4" y2="14"></line>
+                  <line x1="4" y1="10" x2="4" y2="3"></line>
+                  <line x1="12" y1="21" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12" y2="3"></line>
+                  <line x1="20" y1="21" x2="20" y2="16"></line>
+                  <line x1="20" y1="12" x2="20" y2="3"></line>
+                  <line x1="1" y1="14" x2="7" y2="14"></line>
+                  <line x1="9" y1="8" x2="15" y2="8"></line>
+                  <line x1="17" y1="16" x2="23" y2="16"></line>
+                </svg>
+                <h3>Engineering Parameters</h3>
+              </div>
+              <!-- Currency Selector -->
+              <div class="currency-selector" id="currencySelector" role="group" aria-label="Select Currency">
+                <button type="button" class="curr-btn active" data-currency="USD" title="US Dollar">$ USD</button>
+                <button type="button" class="curr-btn" data-currency="EUR" title="Euro">€ EUR</button>
+                <button type="button" class="curr-btn" data-currency="GBP" title="British Pound">£ GBP</button>
+                <button type="button" class="curr-btn" data-currency="INR" title="Indian Rupee">₹ INR</button>
+              </div>
+            </div>
+
+            <!-- Slider 1: Developers on Team -->
+            <div class="slider-group">
+              <div class="slider-label-row">
+                <div class="slider-label-main">
+                  <label for="devsSlider">Active Software Engineers</label>
+                  <span class="slider-hint">Full-time developers building &amp; reviewing features</span>
+                </div>
+                <span class="slider-val-badge" id="devsVal">15</span>
+              </div>
+              <div class="range-wrap">
+                <input type="range" id="devsSlider" min="1" max="250" value="15" />
+                <div class="range-ticks">
+                  <span>1</span>
+                  <span>50</span>
+                  <span>100</span>
+                  <span>175</span>
+                  <span>250</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Slider 2: Features & PRs per Month -->
+            <div class="slider-group">
+              <div class="slider-label-row">
+                <div class="slider-label-main">
+                  <label for="prsSlider">Monthly Pull Requests / User Stories</label>
+                  <span class="slider-hint">Total specifications, features, and PRs processed</span>
+                </div>
+                <span class="slider-val-badge" id="prsVal">60 PRs</span>
+              </div>
+              <div class="range-wrap">
+                <input type="range" id="prsSlider" min="5" max="500" value="60" />
+                <div class="range-ticks">
+                  <span>5</span>
+                  <span>100</span>
+                  <span>250</span>
+                  <span>375</span>
+                  <span>500</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Slider 3: Blended Engineering Hourly Rate -->
+            <div class="slider-group">
+              <div class="slider-label-row">
+                <div class="slider-label-main">
+                  <label for="rateSlider">Blended Engineering Hourly Rate</label>
+                  <span class="slider-hint">Loaded hourly engineering compensation</span>
+                </div>
+                <span class="slider-val-badge" id="rateVal">$75 / hr</span>
+              </div>
+              <div class="range-wrap">
+                <input type="range" id="rateSlider" min="30" max="250" step="5" value="75" />
+                <div class="range-ticks">
+                  <span>$30</span>
+                  <span>$75</span>
+                  <span>$125</span>
+                  <span>$180</span>
+                  <span>$250</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Slider 4: Codebase Size & Architectural Complexity -->
+            <div class="slider-group">
+              <div class="slider-label-row">
+                <div class="slider-label-main">
+                  <label for="complexitySlider">Codebase Scale &amp; Monorepo Depth</label>
+                  <span class="slider-hint">Lines of code under vector RAG governance</span>
+                </div>
+                <span class="slider-val-badge" id="complexityVal">45k LOC</span>
+              </div>
+              <div class="range-wrap">
+                <input type="range" id="complexitySlider" min="10" max="1000" step="5" value="45" />
+                <div class="range-ticks">
+                  <span>10k</span>
+                  <span>250k</span>
+                  <span>500k</span>
+                  <span>750k</span>
+                  <span>1M+</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Comparative Cloud AI Toggle -->
+            <div class="cloud-ai-comparison-box">
+              <div class="comp-box-header">
+                <span>Baseline Cloud Subscriptions Displaced:</span>
+                <span class="cloud-provider-tags">OpenAI &bull; Claude &bull; Copilot</span>
+              </div>
+              <div class="comp-options-grid">
+                <label class="comp-radio-label">
+                  <input type="radio" name="cloudAiBaseline" value="none" />
+                  <span>Manual SDLC (Zero AI)</span>
+                </label>
+                <label class="comp-radio-label active">
+                  <input type="radio" name="cloudAiBaseline" value="standard" checked />
+                  <span>Standard Cloud SaaS ($60/seat + API)</span>
+                </label>
+                <label class="comp-radio-label">
+                  <input type="radio" name="cloudAiBaseline" value="enterprise" />
+                  <span>Enterprise Cloud Tier ($120/seat + API)</span>
+                </label>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right Column: Hero Metrics, Comparative Savings & SDLC Breakdown -->
+          <div class="roi-results-panel">
+            
+            <!-- Hero Highlight: Annual Net Value Generated -->
+            <div class="roi-hero-card">
+              <div class="roi-hero-sub">Annual Total Economic Impact Generated</div>
+              <div class="roi-hero-number" id="annualValueResult">$1,020,600</div>
+              <div class="roi-hero-badges">
+                <span class="roi-pill emerald"><svg class="svg-icon" viewBox="0 0 24 24" width="14" height="14"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg> <strong id="hoursSavedYearResult">13,608</strong> hrs reclaimed/yr</span>
+                <span class="roi-pill saffron"><svg class="svg-icon" viewBox="0 0 24 24" width="14" height="14"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> <strong id="annualCloudSavedResult">$27,720</strong> SaaS bills saved/yr</span>
+              </div>
+            </div>
+
+            <!-- 4-Metric Grid -->
+            <div class="roi-metrics-quad">
+              
+              <div class="metric-quad-card">
+                <div class="metric-quad-icon" style="color: var(--accent-emerald);">
+                  <svg class="svg-icon" viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                </div>
+                <div class="metric-quad-val" id="monthlyHoursSaved">1,134 hrs</div>
+                <div class="metric-quad-label">Monthly Hours Reclaimed</div>
+                <div class="metric-quad-sub">Automating PRs &amp; ADRs</div>
+              </div>
+
+              <div class="metric-quad-card">
+                <div class="metric-quad-icon" style="color: var(--accent-primary-light);">
+                  <svg class="svg-icon" viewBox="0 0 24 24" width="20" height="20"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                </div>
+                <div class="metric-quad-val" id="equivalentEngineers">+7.1 Devs</div>
+                <div class="metric-quad-label">Equivalent Headcount Added</div>
+                <div class="metric-quad-sub">Without recruiting or payroll</div>
+              </div>
+
+              <div class="metric-quad-card">
+                <div class="metric-quad-icon" style="color: var(--accent-saffron);">
+                  <svg class="svg-icon" viewBox="0 0 24 24" width="20" height="20"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="6" y1="8" x2="6" y2="8"></line><line x1="10" y1="8" x2="10" y2="8"></line><line x1="14" y1="8" x2="14" y2="8"></line></svg>
+                </div>
+                <div class="metric-quad-val" id="monthlyCloudSaved">$2,310 / mo</div>
+                <div class="metric-quad-label">Cloud Token Cost Eliminated</div>
+                <div class="metric-quad-sub">Local Ollama inference ($0)</div>
+              </div>
+
+              <div class="metric-quad-card">
+                <div class="metric-quad-icon" style="color: var(--accent-cyan-light);">
+                  <svg class="svg-icon" viewBox="0 0 24 24" width="20" height="20"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                </div>
+                <div class="metric-quad-val" id="velocityMultiplier">28.0x Faster</div>
+                <div class="metric-quad-label">SDLC Lifecycle Velocity</div>
+                <div class="metric-quad-sub">From 14 hrs &rarr; 30 mins per PR</div>
+              </div>
+
+            </div>
+
+            <!-- SDLC Phase Acceleration Breakdown -->
+            <div class="sdlc-breakdown-card">
+              <div class="sdlc-breakdown-header">
+                <h4>SDLC Velocity Acceleration by Lifecycle Stage</h4>
+                <span class="sdlc-time-ratio">Manual: ~14.0 hrs &bull; MONOLITH: ~0.5 hrs</span>
+              </div>
+              <div class="sdlc-bars-list">
+                <div class="sdlc-bar-item">
+                  <div class="sdlc-bar-meta">
+                    <span class="phase-name">Requirements &amp; User Story Extraction</span>
+                    <span class="phase-speedup"><strong>3.5h</strong> &rarr; <strong>12m</strong> (94% Faster)</span>
+                  </div>
+                  <div class="sdlc-progress-track">
+                    <div class="sdlc-progress-fill" style="width: 94%; background: linear-gradient(90deg, #6366f1, #818cf8);"></div>
+                  </div>
+                </div>
+
+                <div class="sdlc-bar-item">
+                  <div class="sdlc-bar-meta">
+                    <span class="phase-name">Architecture Decision Records (ADRs)</span>
+                    <span class="phase-speedup"><strong>4.0h</strong> &rarr; <strong>15m</strong> (93% Faster)</span>
+                  </div>
+                  <div class="sdlc-progress-track">
+                    <div class="sdlc-progress-fill" style="width: 93%; background: linear-gradient(90deg, #06b6d4, #38bdf8);"></div>
+                  </div>
+                </div>
+
+                <div class="sdlc-bar-item">
+                  <div class="sdlc-bar-meta">
+                    <span class="phase-name">Multi-Agent AST Code Review &amp; Linting</span>
+                    <span class="phase-speedup"><strong>2.5h</strong> &rarr; <strong>8m</strong> (95% Faster)</span>
+                  </div>
+                  <div class="sdlc-progress-track">
+                    <div class="sdlc-progress-fill" style="width: 95%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+                  </div>
+                </div>
+
+                <div class="sdlc-bar-item">
+                  <div class="sdlc-bar-meta">
+                    <span class="phase-name">Pytest &amp; Unit Test Suite Synthesis</span>
+                    <span class="phase-speedup"><strong>2.5h</strong> &rarr; <strong>10m</strong> (93% Faster)</span>
+                  </div>
+                  <div class="sdlc-progress-track">
+                    <div class="sdlc-progress-fill" style="width: 93%; background: linear-gradient(90deg, #f59e0b, #fbbf24);"></div>
+                  </div>
+                </div>
+
+                <div class="sdlc-bar-item">
+                  <div class="sdlc-bar-meta">
+                    <span class="phase-name">STRIDE Threat Modeling &amp; Security Auditing</span>
+                    <span class="phase-speedup"><strong>1.5h</strong> &rarr; <strong>5m</strong> (94% Faster)</span>
+                  </div>
+                  <div class="sdlc-progress-track">
+                    <div class="sdlc-progress-fill" style="width: 94%; background: linear-gradient(90deg, #f43f5e, #fb7185);"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Controls: Copy ROI Summary & Launch Studio -->
+            <div class="roi-actions-bar">
+              <button type="button" class="btn btn-secondary" id="copyRoiSummaryBtn">
+                <svg class="svg-icon" viewBox="0 0 24 24" width="16" height="16">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span>Copy Executive ROI Summary</span>
+              </button>
+
+              <a href="/" class="btn btn-primary" style="text-decoration: none;">
+                <span>Deploy MONOLITH Free &rarr;</span>
+              </a>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         BENTO GRID ARCHITECTURE
+         ================================================================== -->
+    <section class="bento-section" id="architecture">
+      <div class="container">
+        
+        <div class="section-header">
+          <span class="section-tag">System Anatomy</span>
+          <h2 class="section-title">Engineered for Data Sovereignty &amp; Speed</h2>
+          <p class="section-subtitle">
+            Six foundational pillars that make MONOLITH the leading local-first agentic software engineering platform.
+          </p>
+        </div>
+
+        <div class="bento-grid">
+          <!-- Bento 1: Local Quantized Models -->
+          <div class="bento-card span-2">
+            <div class="bento-icon" style="color: var(--accent-emerald);">
+              <svg class="svg-icon" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line></svg>
+            </div>
+            <h3 class="bento-title">100% On-Premise Quantized LLM Runtime</h3>
+            <p class="bento-desc">
+              Executes Llama 3.2 1B and Qwen 2.5 natively via Ollama without sending code to third-party APIs. Operates fluidly on consumer laptops (8GB/16GB RAM) with zero recurring token fees and zero latency overhead.
+            </p>
+            <div class="bento-tags">
+              <span class="bento-tag">Ollama Engine</span>
+              <span class="bento-tag">GGUF 4-Bit Quant</span>
+              <span class="bento-tag">Local GPU/CPU</span>
+              <span class="bento-tag">$0.00 / Token</span>
+            </div>
+          </div>
+
+          <!-- Bento 2: Playwright Browser & Media Ingestion -->
+          <div class="bento-card">
+            <div class="bento-icon" style="color: var(--accent-primary);">
+              <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            </div>
+            <h3 class="bento-title">Headed Playwright Browser</h3>
+            <p class="bento-desc">
+              Launches desktop Chromium windows, rehydrates CookieVault sessions, extracts shadcn/Three.js UI blueprints, and sniffs Pinterest MP4 video streams locally.
+            </p>
+            <div class="bento-tags">
+              <span class="bento-tag">Playwright CDP</span>
+              <span class="bento-tag">MP4 Sniffer</span>
+              <span class="bento-tag">UI Reverse-Engine</span>
+            </div>
+          </div>
+
+          <!-- Bento 3: CookieVault SSO -->
+          <div class="bento-card">
+            <div class="bento-icon" style="color: var(--accent-saffron);">
+              <svg class="svg-icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            </div>
+            <h3 class="bento-title">Encrypted CookieVault SSO</h3>
+            <p class="bento-desc">
+              AES-256-GCM encrypted session vault eliminates repetitive manual logins to portals and developer playgrounds. Zero-OTP injection directly into browser contexts.
+            </p>
+            <div class="bento-tags">
+              <span class="bento-tag">AES-256-GCM</span>
+              <span class="bento-tag">Zero-OTP Injection</span>
+              <span class="bento-tag">Local Vault</span>
+            </div>
+          </div>
+
+          <!-- Bento 4: Merkle Ledger -->
+          <div class="bento-card span-2">
+            <div class="bento-icon" style="color: var(--accent-cyan);">
+              <svg class="svg-icon" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+            </div>
+            <h3 class="bento-title">Cryptographic SHA-256 Merkle Audit Ledger</h3>
+            <p class="bento-desc">
+              Every code generation, browser automation action, and agent proposal is sealed into a continuous cryptographic hash chain. Any unauthorized modification severs the chain proofs immediately.
+            </p>
+            <div class="bento-tags">
+              <span class="bento-tag">SHA-256 Hashing</span>
+              <span class="bento-tag">Tamper-Evident</span>
+              <span class="bento-tag">Chained Provenance</span>
+              <span class="bento-tag">100% Audit Proof</span>
+            </div>
+          </div>
+
+          <!-- Bento 5: Local Vector RAG & Code AST -->
+          <div class="bento-card span-2">
+            <div class="bento-icon" style="color: #a855f7;">
+              <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            </div>
+            <h3 class="bento-title">Local Vector RAG &amp; Deterministic AST Engine</h3>
+            <p class="bento-desc">
+              Indexes 10,000+ files locally using ChromaDB embeddings and Tree-sitter AST syntax parse trees. Enables deep symbol navigation, blast-radius call graph tracing, and dual-engine OCR for technical PDF blueprints.
+            </p>
+            <div class="bento-tags">
+              <span class="bento-tag">ChromaDB Vector Store</span>
+              <span class="bento-tag">Tree-Sitter AST</span>
+              <span class="bento-tag">Dual-Engine OCR</span>
+              <span class="bento-tag">Call Graph Tracing</span>
+            </div>
+          </div>
+
+          <!-- Bento 6: Sovereign Air-Gap Boundary & Kill Switch -->
+          <div class="bento-card">
+            <div class="bento-icon" style="color: #ef4444;">
+              <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            </div>
+            <h3 class="bento-title">Sovereign Air-Gap Boundary</h3>
+            <p class="bento-desc">
+              Loopback host isolation with physical emergency kill switch severance. Guaranteed zero cloud telemetry, air-gapped compliance, and absolute developer data privacy.
+            </p>
+            <div class="bento-tags">
+              <span class="bento-tag">Air-Gap Loopback</span>
+              <span class="bento-tag">Kill Switch</span>
+              <span class="bento-tag">Zero Cloud Egress</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         TECHNICAL FAQ
+         ================================================================== -->
+    <section class="faq-section" id="faq">
+      <div class="container" style="max-width: 860px;">
+        
+        <div class="section-header">
+          <h2 class="section-title">Frequently Asked Questions</h2>
+        </div>
+
+        <div class="faq-accordion">
+          <div class="faq-item active">
+            <button class="faq-question">
+              <span>Can MONOLITH run completely offline without an internet connection?</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" width="20" height="20"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="faq-answer">
+              <p>Yes. MONOLITH is built from the ground up for air-gapped environments. The Ollama local daemon, vector RAG embeddings, and AST linting run entirely on your local CPU/GPU with zero external telemetry. If browser automation or external scraping is required, the developer can explicitly toggle the Sovereign Boundary Egress authorization.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>How does the Playwright browser engine extract Pinterest videos locally?</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" width="20" height="20"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="faq-answer">
+              <p>MONOLITH's browser engine attaches a network response listener to Playwright Chromium while resolving the pin URL. It sniffs high-bitrate MP4 streams directly from the network payload or DOM data scripts (with automated web downloader fallback), streaming the raw binary chunks into your local <code>output/downloads/</code> workspace folder with SHA-256 verification.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>How are credentials secured inside the CookieVault?</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" width="20" height="20"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="faq-answer">
+              <p>Session cookies are stored locally in <code>session_vault/</code> and encrypted using AES-256-GCM authenticated encryption. Keys are derived per-host, and raw cookie files are excluded from git tracking. The browser engine injects decrypted cookies only into isolated Playwright contexts in memory.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>What hardware specifications are recommended?</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" width="20" height="20"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="faq-answer">
+              <p>MONOLITH runs smoothly on modern commodity hardware: a minimum of 8 GB RAM and a 4-core CPU (Intel i5/Ryzen 5 or Apple Silicon). Discrete GPUs (NVIDIA RTX with CUDA) further accelerate inference, but are not required thanks to 4-bit quantization in Ollama.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         FINAL CALL TO ACTION BANNER
+         ================================================================== -->
+    <section class="cta-banner-section">
+      <div class="container">
+        <div class="cta-banner-card">
+          <h2 style="font-family: 'Orbitron', sans-serif; font-size: 2rem; margin-bottom: 0.8rem; color: var(--text-primary);">
+            Ready to Take Command of Your Software Engineering?
+          </h2>
+          <p style="font-size: 1.05rem; color: var(--text-secondary); max-width: 640px; margin: 0 auto 1.8rem;">
+            Experience 100% local-first data sovereignty, multi-agent SDLC pipelines, and headed browser automation with MONOLITH today.
+          </p>
+          <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+            <a href="https://github.com/Gulshan-Singh-gs/monolith" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-large" style="text-decoration: none;">
+              <svg class="svg-icon" viewBox="0 0 24 24" width="20" height="20">
+                <polyline points="4 17 10 11 4 5"></polyline>
+                <line x1="12" y1="19" x2="20" y2="19"></line>
+              </svg>
+              <span>Launch MONOLITH Studio</span>
+            </a>
+            <a href="https://github.com/Gulshan-Singh-gs/monolith/tree/main/Start" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-large" style="text-decoration: none;">
+              <svg class="svg-icon" viewBox="0 0 24 24" width="20" height="20">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+              <span>Setup Wizard</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================================================================
+       FOOTER
+       ================================================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        
+        <!-- Brand & Mission Column -->
+        <div class="footer-col footer-col-brand">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.85rem;">
+            <svg viewBox="0 0 48 48" width="28" height="28" style="overflow: visible; flex-shrink: 0;">
+              <defs>
+                <linearGradient id="ftMonoLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#818cf8"/>
+                  <stop offset="100%" stop-color="#4f46e5"/>
+                </linearGradient>
+                <linearGradient id="ftMonoRight" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#6366f1"/>
+                  <stop offset="100%" stop-color="#3730a3"/>
+                </linearGradient>
+              </defs>
+              <path d="M23 4 L11 11 L11 37 L23 44 Z" fill="url(#ftMonoLeft)"/>
+              <path d="M25 4 L37 11 L37 37 L25 44 Z" fill="url(#ftMonoRight)"/>
+            </svg>
+            <div style="font-family: 'Orbitron', sans-serif; font-size: 1.25rem; font-weight: 800; letter-spacing: 0.12em; color: var(--text-primary);">
+              MONOLITH <span style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: rgba(99,102,241,0.18); color: #818cf8; border: 1px solid rgba(99,102,241,0.3); vertical-align: middle; letter-spacing: 0.05em;">AES</span>
+            </div>
+          </div>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; max-width: 320px;">
+            100% on-premise, air-gapped autonomous software engineering &amp; headed browser automation system.
+          </p>
+          <div class="footer-status-pill">
+            <span class="footer-pulse-dot"></span>
+            <span>All Local Systems Nominal &bull; Air-Gap Active</span>
+          </div>
+        </div>
+
+        <!-- Column 2: Simulators -->
+        <div class="footer-col">
+          <h4>Simulators &amp; Core</h4>
+          <ul class="footer-links">
+            <li><a href="#simulators">Multi-Agent SDLC</a></li>
+            <li><a href="#simulators">Browser Automation</a></li>
+            <li><a href="#simulators">Air-Gap Boundary</a></li>
+            <li><a href="#simulators">SHA-256 Merkle Ledger</a></li>
+            <li><a href="#calculator">Developer Velocity &amp; ROI</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Platform & Docs -->
+        <div class="footer-col">
+          <h4>Platform &amp; Tools</h4>
+          <ul class="footer-links">
+            <li>
+              <a href="https://github.com/Gulshan-Singh-gs/monolith" target="_blank" rel="noopener noreferrer">
+                <svg class="svg-icon" viewBox="0 0 24 24" width="14" height="14"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                <span>MONOLITH GitHub Repository</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/Gulshan-Singh-gs/monolith/tree/main/Start" target="_blank" rel="noopener noreferrer">
+                <svg class="svg-icon" viewBox="0 0 24 24" width="14" height="14"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                <span>Setup Wizard</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/Gulshan-Singh-gs/monolith#readme" target="_blank" rel="noopener noreferrer">
+                <svg class="svg-icon" viewBox="0 0 24 24" width="14" height="14"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                <span>Architecture &amp; Docs</span>
+              </a>
+            </li>
+            <li>
+              <a href="#simulators">
+                <svg class="svg-icon" viewBox="0 0 24 24" width="14" height="14"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                <span>Interactive Simulators</span>
+              </a>
+            </li>
+            <li><a href="#faq">Frequently Asked Questions</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Sovereignty & Security -->
+        <div class="footer-col">
+          <h4>Security &amp; Sovereignty</h4>
+          <ul class="footer-links">
+            <li>
+              <span style="color: var(--text-secondary); font-size: 0.88rem; display: inline-flex; align-items: center; gap: 0.45rem;">
+                <svg class="svg-icon" viewBox="0 0 24 24" width="14" height="14"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                <span>Zero Cloud Egress</span>
+              </span>
+            </li>
+            <li>
+              <span style="color: var(--text-secondary); font-size: 0.88rem; display: inline-flex; align-items: center; gap: 0.45rem;">
+                <svg class="svg-icon" viewBox="0 0 24 24" width="14" height="14"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                <span>AES-256 CookieVault</span>
+              </span>
+            </li>
+            <li>
+              <span style="color: var(--text-secondary); font-size: 0.88rem; display: inline-flex; align-items: center; gap: 0.45rem;">
+                <svg class="svg-icon" viewBox="0 0 24 24" width="14" height="14"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+                <span>SHA-256 Provenance</span>
+              </span>
+            </li>
+            <li>
+              <span style="color: var(--text-secondary); font-size: 0.88rem; display: inline-flex; align-items: center; gap: 0.45rem;">
+                <svg class="svg-icon" viewBox="0 0 24 24" width="14" height="14"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+                <span>Local-First Weights</span>
+              </span>
+            </li>
+            <li>
+              <span style="color: var(--text-secondary); font-size: 0.88rem; display: inline-flex; align-items: center; gap: 0.45rem;">
+                <svg class="svg-icon" viewBox="0 0 24 24" width="14" height="14"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                <span>Audit Merkle Log</span>
+              </span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Footer Bottom Bar -->
+      <div class="footer-bottom">
+        <div class="footer-bottom-meta">
+          <span>&copy; 2026 MONOLITH Systems. 100% On-Premise &bull; Sovereign &bull; Open-Weight.</span>
+          <span class="footer-version-tag">MONOLITH v2.4.0 (Enterprise Sovereign Edition)</span>
+        </div>
+        <a href="#top" class="back-to-top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">
+          <svg class="svg-icon" viewBox="0 0 24 24" width="14" height="14">
+            <polyline points="18 15 12 9 6 15"></polyline>
+          </svg>
+          <span>Back to Top</span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Three.js (Local Sovereign Air-Gapped Engine) -->
+  <script src="./assets/three.min.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

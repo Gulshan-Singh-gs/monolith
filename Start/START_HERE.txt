@@ -1,0 +1,13 @@
+========================================================================
+MONOLITH — Autonomous Engineering System
+========================================================================
+
+HOW TO START THE APPLICATION:
+
+1. Double-click "Launch_MONOLITH.bat" in this folder.
+2. The setup wizard will automatically open on your screen.
+3. Click "START MONOLITH (ONE-CLICK)".
+4. Your web browser will automatically open to the dashboard.
+
+That is all you have to do! No technical setup required.
+========================================================================

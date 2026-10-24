@@ -1,0 +1,199 @@
+# ==============================================================================
+# MONOLITH — Autonomous Engineering System
+# Comprehensive .gitignore for 100% Sovereign Local-First Repository
+# ==============================================================================
+
+# --- Secrets, Credentials & Local Environment ---
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.cert
+*.crt
+*.pfx
+*.p12
+
+# --- Sovereign Runtime Vaults, User Data & Downloads ---
+# Encrypted session credentials & operator tokens
+session_vault/*
+!session_vault/portal_sessions.example.json
+!session_vault/.gitkeep
+session_vault/.vault_key
+session_vault/portal_sessions.enc
+session_vault/*.json
+session_vault/*.jsonl
+session_vault/*.log
+session_vault/*.lock
+
+output/.vault/*
+!output/.vault/profile.example.json
+!output/.vault/.gitkeep
+
+# User uploaded workspace documents
+output/uploads/*
+!output/uploads/.gitkeep
+
+# Ingested and scraped media (Pinterest videos, WebM, MP4)
+output/downloads/*
+!output/downloads/.gitkeep
+
+# Audio dictation temporary buffers
+output/temp_audio/*
+!output/temp_audio/.gitkeep
+
+# Exported binaries, packages, videos and presentations
+output/*.zip
+output/*.pdf
+output/*.mp4
+output/*.mp3
+output/*.wav
+output/*.jsonl
+output/downloaded_models.json
+output/manifest.json
+output/anatomy_video/
+output/*_REPORT.md
+output/SECURITY_AUDIT_REPORT.md
+
+# Video generation, walkthrough recordings, presentations & marketing media
+brag-output/
+brag-composition/
+presentation/
+product-walkthrough/
+product-visual-documentation/
+scripts/
+docs/video/
+.agents/
+capture_screenshots.js
+export_pdf.js
+skills-lock.json
+linkedin-skills
+Steven Wolfe.jpg
+
+# Media & binary formats
+*.mp4
+*.mp3
+*.wav
+*.webm
+*.ogg
+*.webp
+*.docx
+*.pdf
+presentation/export/
+*.sqlite3
+*.sqlite
+*.db
+*.log
+*.log.*
+*.jsonl
+audit_ledger.jsonl
+audit_trail.jsonl
+
+# Temporary test & scratch files
+test_*.py
+test_*.docx
+test_*.pdf
+test_*.png
+test_*.jpg
+test_*.mp3
+test_*.mp4
+tests/
+scratch/
+tmp/
+temp/
+
+# --- Python Environment & Caches ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual Environments
+venv/
+env/
+ENV/
+.venv/
+env.bak/
+venv.bak/
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+test-results/
+playwright-report/
+.playwright/
+playwright/.cache/
+recordings/
+screenshots/
+
+# --- Node.js & Web Assets ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# --- Local AI Models & Checkpoints ---
+models/
+*.bin
+*.gguf
+*.safetensors
+*.onnx
+
+# --- Operating System & Editor Metadata ---
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+desktop.ini
+*.lnk
+*.tmp
+*.bak
+~*
+*.pid
+*.lock
+
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.antigravity-ide/
+.gemini/
+
+# Graft Knowledge Engine Cache
+/graft/
+.graft/
+
+# Setup completion marker
+.setup_completed
+*.setup_completed
