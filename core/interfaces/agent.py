@@ -35,6 +35,24 @@ class AgentRole(str, Enum):
     SECURITY_AGENT = "SECURITY_AGENT"
     DEPLOYMENT_AGENT = "DEPLOYMENT_AGENT"
 
+    @classmethod
+    def from_string(cls, role_str: str) -> "AgentRole":
+        """
+        Parses a role string case-insensitively.
+        Accepts uppercase/lowercase with underscores or hyphens.
+        Raises ValueError if invalid.
+        """
+        if not role_str or not isinstance(role_str, str):
+            raise ValueError(f"Invalid role: '{role_str}'")
+        normalized = role_str.strip().upper().replace("-", "_")
+        for role in cls:
+            if role.value == normalized:
+                return role
+        valid_roles = [r.value for r in cls]
+        raise ValueError(
+            f"Invalid role '{role_str}'. Permissible roles: {', '.join(valid_roles)}"
+        )
+
 
 class AgentTaskContract(BaseModel):
     task_id: str = Field(default_factory=lambda: f"TASK-{uuid.uuid4().hex[:8].upper()}")

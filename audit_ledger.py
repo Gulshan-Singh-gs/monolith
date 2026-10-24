@@ -123,7 +123,7 @@ class AuditLedger:
         # Append to JSONL file
         try:
             with open(self.log_file, "a", encoding="utf-8") as f:
-                f.write(event.json() + "\n")
+                f.write(event.model_dump_json() + "\n")
         except Exception as e:
             print(f"[AuditLedger] Error writing log: {e}")
 

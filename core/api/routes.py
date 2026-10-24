@@ -19,11 +19,15 @@ from core.orchestrator.orchestrator import LocalOrchestrator
 from core.skills.models import SkillCategory, SkillExecutionRequest
 from core.skills.registry import SkillRegistry
 from core.sdlc.generator import SDLCArtifactGenerator
+from core.workspace.patch_engine import PatchEngine
+from core.workspace.git_service import GitService
 
 router = APIRouter(prefix="/api", tags=["Sovereign Workbench Core"])
 
 # System Singletons
 workspace_engine = SecureWorkspaceEngine(initial_root=Path.cwd())
+patch_engine = PatchEngine(workspace_root=workspace_engine.get_root())
+git_service = GitService(workspace_root=workspace_engine.get_root(), broker=workspace_engine.execution_broker)
 model_gateway = SovereignModelGateway(default_privacy_mode=PrivacyMode.LOCAL_ONLY)
 orchestrator = LocalOrchestrator(workspace=workspace_engine, gateway=model_gateway)
 skill_registry = SkillRegistry(gateway=model_gateway, workspace=workspace_engine)
@@ -74,12 +78,15 @@ async def get_workspace_info():
 
 @router.post("/workspace/open")
 async def open_workspace(req: OpenWorkspaceRequest):
+    global patch_engine, git_service
     target = Path(req.directory_path).resolve()
     if not target.exists() or not target.is_dir():
         raise HTTPException(status_code=400, detail=f"Directory '{req.directory_path}' does not exist or is not a directory.")
     success = workspace_engine.set_root(target)
     if not success:
         raise HTTPException(status_code=500, detail="Failed to initialize workspace root.")
+    patch_engine = PatchEngine(workspace_root=workspace_engine.get_root())
+    git_service = GitService(workspace_root=workspace_engine.get_root(), broker=workspace_engine.execution_broker)
     return {
         "status": "SUCCESS",
         "root_path": str(workspace_engine.get_root()),
@@ -129,6 +136,51 @@ async def run_workspace_command(req: RunCommandRequest):
 
 
 # -------------------------------------------------------------
+# PATCH ENGINE & GIT SERVICE ENDPOINTS
+# -------------------------------------------------------------
+class PatchTextRequest(BaseModel):
+    patch_text: str
+
+
+class RollbackRequest(BaseModel):
+    checkpoint_id: str
+
+
+@router.post("/workspace/patch/validate")
+async def validate_patch(req: PatchTextRequest):
+    res = patch_engine.validate_patch(req.patch_text)
+    return res.model_dump()
+
+
+@router.post("/workspace/patch/apply")
+async def apply_patch(req: PatchTextRequest):
+    res = patch_engine.apply_patch(req.patch_text)
+    if not res.success:
+        raise HTTPException(status_code=400, detail=res.error)
+    return res.model_dump()
+
+
+@router.post("/workspace/patch/rollback")
+async def rollback_patch(req: RollbackRequest):
+    success = patch_engine.rollback_checkpoint(req.checkpoint_id)
+    if not success:
+        raise HTTPException(status_code=400, detail=f"Checkpoint '{req.checkpoint_id}' not found or rollback failed.")
+    return {"status": "SUCCESS", "checkpoint_id": req.checkpoint_id}
+
+
+@router.get("/workspace/git/status")
+async def get_git_status():
+    res = await git_service.get_status()
+    return res.model_dump()
+
+
+@router.get("/workspace/git/diff")
+async def get_git_diff(staged: bool = False, file_path: Optional[str] = None):
+    diff = await git_service.get_diff(staged=staged, file_path=file_path)
+    return {"diff": diff}
+
+
+# -------------------------------------------------------------
 # GATEWAY & PRIVACY ENDPOINTS
 # -------------------------------------------------------------
 class SetPrivacyRequest(BaseModel):
@@ -153,6 +205,17 @@ async def set_privacy_mode(req: SetPrivacyRequest):
         )
 
 
+@router.get("/gateway/providers")
+async def get_gateway_providers():
+    return {"providers": model_gateway.list_providers()}
+
+
+@router.get("/gateway/providers/health")
+async def get_gateway_providers_health():
+    health = await model_gateway.check_providers_health()
+    return {"health": health}
+
+
 # -------------------------------------------------------------
 # ORCHESTRATOR TASK ENDPOINTS
 # -------------------------------------------------------------
@@ -172,9 +235,9 @@ async def list_orchestrator_tasks():
 @router.post("/orchestrator/tasks")
 async def create_orchestrator_task(req: CreateTaskRequest):
     try:
-        role_enum = AgentRole(req.role.lower())
-    except ValueError:
-        role_enum = AgentRole.ORCHESTRATOR
+        role_enum = AgentRole.from_string(req.role)
+    except ValueError as ve:
+        raise HTTPException(status_code=400, detail=str(ve))
 
     task = orchestrator.create_task(
         role=role_enum,

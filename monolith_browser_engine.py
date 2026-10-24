@@ -33,8 +33,10 @@ import hashlib
 import urllib.request
 import urllib.parse
 import logging
+from enum import Enum
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Callable
+from pydantic import BaseModel, Field
 
 from playwright.async_api import async_playwright, Browser, BrowserContext, Page
 
@@ -48,11 +50,36 @@ DEFAULT_DOWNLOAD_DIR = BASE_DIR / "output" / "downloads"
 DEFAULT_DOWNLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 
+class BrowserSessionState(str, Enum):
+    DISCONNECTED = "DISCONNECTED"
+    NEEDS_LOGIN = "NEEDS_LOGIN"
+    AUTHENTICATED = "AUTHENTICATED"
+    READY = "READY"
+    CHALLENGE_REQUIRED = "CHALLENGE_REQUIRED"
+    PAUSED = "PAUSED"
+    FAILED = "FAILED"
+
+
+class BrowserSessionMeta(BaseModel):
+    session_id: str
+    name: str
+    state: BrowserSessionState = BrowserSessionState.READY
+    current_url: str
+    title: str = ""
+    trusted_domain: Optional[str] = None
+    task_id: Optional[str] = None
+    challenge_reason: Optional[str] = None
+    is_headed: bool = True
+    created_at: float = Field(default_factory=time.time)
+    updated_at: float = Field(default_factory=time.time)
+
+
 class MonolithBrowserEngine:
     def __init__(self):
         self.cookie_vault = CookieVault()
         self.download_dir = DEFAULT_DOWNLOAD_DIR
         self.active_processes: Dict[str, Any] = {}
+        self.named_sessions: Dict[str, BrowserSessionMeta] = {}
         self.recent_downloads: List[Dict[str, Any]] = []
         self._load_recent_downloads()
 
@@ -133,6 +160,19 @@ class MonolithBrowserEngine:
                 "started_at": start_time
             }
 
+            meta = BrowserSessionMeta(
+                session_id=session_id,
+                name=f"Headed Session - {title[:20]}",
+                state=BrowserSessionState.READY,
+                current_url=url,
+                title=title,
+                trusted_domain=target_domain,
+                is_headed=True,
+                created_at=start_time,
+                updated_at=start_time
+            )
+            self.named_sessions[session_id] = meta
+
             audit_ledger.record_action(
                 action_type="BROWSER_HEADED_LAUNCH",
                 user="Developer",
@@ -146,6 +186,7 @@ class MonolithBrowserEngine:
                 "session_id": session_id,
                 "title": title,
                 "url": url,
+                "state": meta.state.value,
                 "cookies_injected": injected,
                 "message": f"Interactive Chromium session '{session_id}' launched successfully on desktop."
             }
@@ -157,8 +198,51 @@ class MonolithBrowserEngine:
                 "message": f"Could not launch browser session: {e}"
             }
 
+    def pause_for_challenge(self, session_id: str, reason: str = "MFA / CAPTCHA challenge detected") -> Optional[BrowserSessionMeta]:
+        """Pauses automated interaction when an authentication challenge or CAPTCHA appears."""
+        meta = self.named_sessions.get(session_id)
+        if meta:
+            meta.state = BrowserSessionState.CHALLENGE_REQUIRED
+            meta.challenge_reason = reason
+            meta.updated_at = time.time()
+            audit_ledger.record_action(
+                action_type="BROWSER_CHALLENGE_PAUSE",
+                user="SYSTEM",
+                details=f"Browser session {session_id} paused for human intervention: {reason}",
+                severity="WARN",
+                target_resource=meta.current_url
+            )
+        return meta
+
+    def resume_after_challenge(self, session_id: str) -> Optional[BrowserSessionMeta]:
+        """Resumes session after user resolves challenge manually in visible headed window."""
+        meta = self.named_sessions.get(session_id)
+        if meta and meta.state in (BrowserSessionState.CHALLENGE_REQUIRED, BrowserSessionState.PAUSED):
+            meta.state = BrowserSessionState.READY
+            meta.challenge_reason = None
+            meta.updated_at = time.time()
+            audit_ledger.record_action(
+                action_type="BROWSER_CHALLENGE_RESUME",
+                user="OPERATOR",
+                details=f"Browser session {session_id} challenge marked resolved by operator.",
+                severity="INFO",
+                target_resource=meta.current_url
+            )
+        return meta
+
+    def list_named_sessions(self) -> List[BrowserSessionMeta]:
+        """Returns catalog of all registered browser sessions and states."""
+        return list(self.named_sessions.values())
+
+    def get_named_session(self, session_id: str) -> Optional[BrowserSessionMeta]:
+        return self.named_sessions.get(session_id)
+
     async def close_session(self, session_id: str) -> Dict[str, Any]:
         """Closes an active browser session cleanly."""
+        if session_id in self.named_sessions:
+            self.named_sessions[session_id].state = BrowserSessionState.DISCONNECTED
+            self.named_sessions[session_id].updated_at = time.time()
+
         if session_id in self.active_processes:
             try:
                 proc = self.active_processes.pop(session_id)

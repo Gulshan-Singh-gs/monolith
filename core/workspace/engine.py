@@ -17,17 +17,20 @@ from core.interfaces.workspace import (
     WorkspaceFileMeta,
     CommandExecutionResult
 )
+from core.execution.broker import GovernedExecutionBroker
 
 
 class SecureWorkspaceEngine(IWorkspaceEngine):
     def __init__(self, initial_root: Optional[Path] = None):
         self.root_path: Path = (initial_root or Path.cwd()).resolve()
+        self.execution_broker = GovernedExecutionBroker(workspace_root=self.root_path)
 
     def set_root(self, root_dir: Path) -> bool:
         resolved = Path(root_dir).resolve()
         if not resolved.exists() or not resolved.is_dir():
             return False
         self.root_path = resolved
+        self.execution_broker.set_workspace_root(self.root_path)
         return True
 
     def get_root(self) -> Path:
@@ -101,68 +104,12 @@ class SecureWorkspaceEngine(IWorkspaceEngine):
         env_vars: Optional[Dict[str, str]] = None
     ) -> CommandExecutionResult:
         """
-        Executes a controlled command strictly inside the workspace root.
-        Blocks high-risk system commands and prevents workspace escapes.
+        Executes a controlled command strictly inside the workspace root
+        via the GovernedExecutionBroker with process-tree cleanup and policy enforcement.
         """
-        # Block overtly dangerous commands
-        forbidden_patterns = [
-            r"\brm\s+-[rRfF]+",
-            r"\bdel\s+(?:/[sS]|/q|/f|\*|[cC]:)",
-            r"\bformat\b",
-            r"\bshutdown\b",
-            r"\bcurl\s+.*\|\s*(?:bash|sh|powershell)"
-        ]
-        for pattern in forbidden_patterns:
-            if re.search(pattern, command, re.IGNORECASE):
-                return CommandExecutionResult(
-                    command=command,
-                    exit_code=-1,
-                    stdout="",
-                    stderr=f"Command blocked by workspace security policy: matched dangerous pattern '{pattern}'",
-                    duration_seconds=0.0
-                )
-
-        start_time = time.time()
-        env = os.environ.copy()
-        if env_vars:
-            env.update(env_vars)
-
-        try:
-            proc = await asyncio.create_subprocess_shell(
-                command,
-                cwd=str(self.root_path),
-                stdout=asyncio.subprocess.PIPE,
-                stderr=asyncio.subprocess.PIPE,
-                env=env
-            )
-            stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=timeout_seconds)
-            duration = time.time() - start_time
-            return CommandExecutionResult(
-                command=command,
-                exit_code=proc.returncode if proc.returncode is not None else 0,
-                stdout=stdout.decode("utf-8", errors="replace"),
-                stderr=stderr.decode("utf-8", errors="replace"),
-                duration_seconds=duration,
-                timed_out=False
-            )
-        except asyncio.TimeoutError:
-            try:
-                proc.kill()
-            except Exception:
-                pass
-            return CommandExecutionResult(
-                command=command,
-                exit_code=-1,
-                stdout="",
-                stderr=f"Command timed out after {timeout_seconds}s.",
-                duration_seconds=time.time() - start_time,
-                timed_out=True
-            )
-        except Exception as e:
-            return CommandExecutionResult(
-                command=command,
-                exit_code=-1,
-                stdout="",
-                stderr=str(e),
-                duration_seconds=time.time() - start_time
-            )
+        return await self.execution_broker.execute_command(
+            command=command,
+            cwd=self.root_path,
+            timeout_seconds=timeout_seconds,
+            env_vars=env_vars
+        )

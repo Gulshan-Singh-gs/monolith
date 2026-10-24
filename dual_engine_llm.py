@@ -157,11 +157,8 @@ class DualEngineLLM:
         local_model: str = "llama3.2:1b",
     ):
         self._load_env_if_needed()
-        self.groq_api_key = (
-            groq_api_key
-            or os.getenv("GROQ_API_KEY", "")
-            or os.getenv("GROK_API_KEY", "")
-        )
+        self.groq_api_key = groq_api_key or os.getenv("GROQ_API_KEY", "")
+        self.grok_api_key = os.getenv("XAI_API_KEY", "") or os.getenv("GROK_API_KEY", "")
         self.gemini_api_key = gemini_api_key or os.getenv("GEMINI_API_KEY", "")
         self.preferred_engine = preferred_engine
         self.ollama_url = ollama_url
@@ -381,30 +378,26 @@ class DualEngineLLM:
         full_prompt = f"{system_prompt}\n\n{prompt}" if system_prompt else prompt
         model_to_use = self.local_model or "llama3.2:1b"
 
-        async with httpx.AsyncClient(timeout=httpx.Timeout(120.0, connect=5.0)) as client:
+        async with httpx.AsyncClient(timeout=httpx.Timeout(connect=1.5, read=25.0, write=5.0, pool=5.0)) as client:
             # Query Ollama for installed models to avoid 404 if default name differs
             try:
-                tags_resp = await client.get(f"{self.ollama_url}/api/tags", timeout=2.5)
+                tags_resp = await client.get(f"{self.ollama_url}/api/tags", timeout=1.5)
             except Exception:
-                try:
-                    from ollama_manager import OllamaManager
-                    OllamaManager().auto_start_daemon()
-                    tags_resp = await client.get(f"{self.ollama_url}/api/tags", timeout=3.0)
-                except Exception as auto_err:
-                    tags_resp = None
-                    logger.debug(f"Ollama auto-start check skipped: {auto_err}")
+                tags_resp = None
 
-            if tags_resp is not None and tags_resp.status_code == 200:
-                try:
-                    models_data = tags_resp.json().get("models", [])
-                    installed_names = [m.get("name", "") for m in models_data]
-                    # If current model_to_use is not installed, switch to first installed model
-                    if installed_names and not any(model_to_use in name for name in installed_names):
-                        model_to_use = installed_names[0]
-                        self.local_model = model_to_use
-                        logger.info(f"Ollama dynamic switch: using installed model '{model_to_use}'")
-                except Exception as tag_err:
-                    logger.debug(f"Ollama tags check skipped: {tag_err}")
+            if tags_resp is None or tags_resp.status_code != 200:
+                raise ConnectionError(f"Ollama server unreachable at {self.ollama_url}")
+
+            try:
+                models_data = tags_resp.json().get("models", [])
+                installed_names = [m.get("name", "") for m in models_data]
+                # If current model_to_use is not installed, switch to first installed model
+                if installed_names and not any(model_to_use in name for name in installed_names):
+                    model_to_use = installed_names[0]
+                    self.local_model = model_to_use
+                    logger.info(f"Ollama dynamic switch: using installed model '{model_to_use}'")
+            except Exception as tag_err:
+                logger.debug(f"Ollama tags check skipped: {tag_err}")
 
             payload = {
                 "model": model_to_use,
@@ -417,7 +410,7 @@ class DualEngineLLM:
             }
             if system_prompt:
                 payload["system"] = system_prompt
-            resp = await client.post(f"{self.ollama_url}/api/generate", json=payload)
+            resp = await client.post(f"{self.ollama_url}/api/generate", json=payload, timeout=15.0)
             resp.raise_for_status()
             res_text = resp.json().get("response", "")
             if res_text and res_text.strip():

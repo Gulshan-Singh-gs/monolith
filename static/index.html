@@ -194,6 +194,18 @@
           <span class="dot-indicator" style="background: var(--emerald); width: 8px; height: 8px;"></span>
           <span id="sovereign-boundary-label">MONOLITH RUNTIME (AIR-GAPPED)</span>
         </div>
+        <button id="btn-open-mission-control" onclick="window.MonolithStudio.openModal('monolith-mission-control-modal')" class="btn-neumorph" title="Autonomous Multi-Agent Mission Control &amp; Gating" style="padding: 7px 14px; font-size: 12px; display: inline-flex; align-items: center; gap: 7px; cursor: pointer; border-radius: var(--r-pill); color: var(--acc); border: 1px solid rgba(99,102,241,0.4);">
+          <svg class="svg-icon sm" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <span style="font-weight: 700;">Mission Control</span>
+        </button>
+        <button id="btn-open-code-review" onclick="window.MonolithStudio.openModal('monolith-code-review-modal')" class="btn-neumorph" title="Patch-First Code Review &amp; Git Diff" style="padding: 7px 14px; font-size: 12px; display: inline-flex; align-items: center; gap: 7px; cursor: pointer; border-radius: var(--r-pill);">
+          <svg class="svg-icon sm" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+          <span style="font-weight: 700;">Code Review</span>
+        </button>
+        <button id="btn-open-models" onclick="window.MonolithStudio.openModal('monolith-models-modal')" class="btn-neumorph" title="Sovereign Model Provider Gateway &amp; Routing" style="padding: 7px 14px; font-size: 12px; display: inline-flex; align-items: center; gap: 7px; cursor: pointer; border-radius: var(--r-pill);">
+          <svg class="svg-icon sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3m0 14v3M2 12h3m14 0h3"></path></svg>
+          <span style="font-weight: 700;">Models</span>
+        </button>
         <button id="btn-open-browser-modal" class="btn-neumorph" title="MONOLITH Browser Automation, UI Inspector &amp; Pinterest Media Saver" style="padding: 7px 14px; font-size: 12px; display: inline-flex; align-items: center; gap: 7px; cursor: pointer; border-radius: var(--r-pill); color: var(--acc); border: 1px solid rgba(99,102,241,0.4);">
           <svg class="svg-icon sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
           <span style="font-weight: 700;">Browser &amp; Media</span>
@@ -2019,6 +2031,108 @@
 
   </div>
 
+  <!-- =========================================================================
+       MONOLITH MISSION CONTROL MODAL (ORCHESTRATOR & APPROVAL GATES)
+       ========================================================================= -->
+  <div class="modal-backdrop" id="monolith-mission-control-modal" style="z-index: 10010; display: none;">
+    <div class="modal-card" style="max-width: 900px; width: 95%; max-height: 90vh; display: flex; flex-direction: column; padding: 0; overflow: hidden; border-radius: var(--r-card); border-top: 4px solid var(--acc);">
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; border-bottom: 1px solid var(--line); background: var(--bg-card);">
+        <div>
+          <h3 style="margin: 0; font-family: var(--font-brand, 'Orbitron', sans-serif); font-size: 16px; font-weight: 800; color: var(--ink);">MISSION CONTROL &bull; AUTONOMOUS TASKS</h3>
+          <p style="margin: 2px 0 0; font-size: 12px; color: var(--muted);">Durable task lifecycle, assigned agent roles, and sovereign human-approval governance.</p>
+        </div>
+        <button class="btn-neumorph" onclick="window.MonolithStudio.closeModal('monolith-mission-control-modal')" style="padding: 6px 12px; font-size: 14px;">&times;</button>
+      </div>
+      <div style="flex: 1; overflow-y: auto; padding: 24px; background: var(--bg);">
+        <!-- Create Task Form -->
+        <div class="card-neumorph" style="padding: 16px; margin-bottom: 20px;">
+          <h4 style="margin: 0 0 12px; font-size: 13.5px; font-weight: 700; color: var(--ink);">Deploy New Engineering Task</h4>
+          <div style="display: grid; grid-template-columns: 200px 1fr auto; gap: 10px; align-items: center;">
+            <select id="mc-task-role" class="input-well" style="padding: 8px 12px; font-size: 12.5px;">
+              <option value="CODING_AGENT">Coding Agent</option>
+              <option value="ARCHITECT">Architect</option>
+              <option value="REQUIREMENTS_ANALYST">Requirements Analyst</option>
+              <option value="CODE_REVIEWER">Code Reviewer</option>
+              <option value="TESTING_AGENT">Testing Agent</option>
+              <option value="SECURITY_AGENT">Security Agent</option>
+              <option value="DEPLOYMENT_AGENT">Deployment Agent</option>
+            </select>
+            <input type="text" id="mc-task-objective" class="search-bar-input" placeholder="Define objective (e.g. Implement JWT session revocation endpoint)" style="padding: 9px 14px; font-size: 12.5px; border: 1px solid var(--line); border-radius: var(--r-tile); background: var(--bg-inset);">
+            <button class="btn-neumorph primary" onclick="window.MonolithStudio.createTask()" style="padding: 9px 18px; font-size: 12.5px; font-weight: 700; white-space: nowrap;">Create Task</button>
+          </div>
+          <div style="margin-top: 10px; display: flex; align-items: center; gap: 8px;">
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); cursor: pointer;">
+              <input type="checkbox" id="mc-task-approval" style="cursor: pointer;">
+              <span>Require explicit human approval before execution (High Risk Gate)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Task List Container -->
+        <div id="mc-tasks-list">
+          <div style="text-align: center; color: var(--muted); padding: 20px;">Loading orchestrator tasks...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MONOLITH MODEL REGISTRY MODAL
+       ========================================================================= -->
+  <div class="modal-backdrop" id="monolith-models-modal" style="z-index: 10010; display: none;">
+    <div class="modal-card" style="max-width: 800px; width: 95%; max-height: 90vh; display: flex; flex-direction: column; padding: 0; overflow: hidden; border-radius: var(--r-card); border-top: 4px solid var(--acc);">
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; border-bottom: 1px solid var(--line); background: var(--bg-card);">
+        <div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <h3 style="margin: 0; font-family: var(--font-brand, 'Orbitron', sans-serif); font-size: 16px; font-weight: 800; color: var(--ink);">MODEL PROVIDER REGISTRY</h3>
+            <span id="models-privacy-badge" class="tag-sih" style="color: var(--emerald); font-weight: 700;">MODE: LOCAL_ONLY</span>
+          </div>
+          <p style="margin: 2px 0 0; font-size: 12px; color: var(--muted);">Decoupled provider adapters, masked secrets, and strict zero-egress local boundaries.</p>
+        </div>
+        <button class="btn-neumorph" onclick="window.MonolithStudio.closeModal('monolith-models-modal')" style="padding: 6px 12px; font-size: 14px;">&times;</button>
+      </div>
+      <div style="flex: 1; overflow-y: auto; padding: 24px; background: var(--bg);">
+        <!-- Privacy Mode Switcher -->
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+          <button class="btn-neumorph" onclick="window.MonolithStudio.setPrivacyMode('LOCAL_ONLY')" style="flex: 1; padding: 10px; font-size: 12px; font-weight: 700; color: var(--emerald);">LOCAL_ONLY (Zero Egress)</button>
+          <button class="btn-neumorph" onclick="window.MonolithStudio.setPrivacyMode('HYBRID')" style="flex: 1; padding: 10px; font-size: 12px; font-weight: 700;">HYBRID</button>
+          <button class="btn-neumorph" onclick="window.MonolithStudio.setPrivacyMode('CONNECTED')" style="flex: 1; padding: 10px; font-size: 12px; font-weight: 700;">CONNECTED</button>
+        </div>
+        <div id="models-provider-list">
+          <div style="text-align: center; color: var(--muted); padding: 20px;">Loading registered model providers...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MONOLITH CODE REVIEW & PATCH MODAL
+       ========================================================================= -->
+  <div class="modal-backdrop" id="monolith-code-review-modal" style="z-index: 10010; display: none;">
+    <div class="modal-card" style="max-width: 880px; width: 95%; max-height: 90vh; display: flex; flex-direction: column; padding: 0; overflow: hidden; border-radius: var(--r-card); border-top: 4px solid var(--acc);">
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; border-bottom: 1px solid var(--line); background: var(--bg-card);">
+        <div>
+          <h3 style="margin: 0; font-family: var(--font-brand, 'Orbitron', sans-serif); font-size: 16px; font-weight: 800; color: var(--ink);">CODE REVIEW &bull; PATCH ENGINE</h3>
+          <p style="margin: 2px 0 0; font-size: 12px; color: var(--muted);">Unified diff inspection, workspace path confinement, and 1-click recoverable checkpoints.</p>
+        </div>
+        <button class="btn-neumorph" onclick="window.MonolithStudio.closeModal('monolith-code-review-modal')" style="padding: 6px 12px; font-size: 14px;">&times;</button>
+      </div>
+      <div style="flex: 1; overflow-y: auto; padding: 24px; background: var(--bg);">
+        <div id="cr-git-status" style="margin-bottom: 14px; padding: 10px 14px; background: var(--bg-card); border-radius: 8px; border: 1px solid var(--line);">Checking Git status...</div>
+        <div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+          <strong style="font-size: 13px; color: var(--ink);">Proposed Patch / Unified Diff</strong>
+          <button class="btn-neumorph primary sm" onclick="window.MonolithStudio.applyPatchFromText()">Apply Patch Safely</button>
+        </div>
+        <textarea id="cr-patch-input" placeholder="Paste unified diff here or inspect working tree changes below..." style="width: 100%; height: 140px; font-family: var(--font-mono); font-size: 12px; padding: 12px; border-radius: var(--r-tile); border: 1px solid var(--line); background: var(--bg-inset); color: var(--ink); box-sizing: border-box;"></textarea>
+        <div style="margin-top: 14px;">
+          <strong style="font-size: 12.5px; color: var(--muted);">Working Tree Git Diff:</strong>
+          <pre id="cr-diff-viewer" style="margin-top: 6px; padding: 12px; background: var(--bg-inset); border-radius: var(--r-tile); border: 1px solid var(--line); font-family: var(--font-mono); font-size: 11.5px; color: var(--ink); white-space: pre-wrap; max-height: 220px; overflow-y: auto;">Inspecting diff...</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="/static/app.js?v=6.1"></script>
+  <script src="/static/monolith_studio.js?v=1.0"></script>
 </body>
 </html>

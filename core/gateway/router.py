@@ -17,13 +17,21 @@ from core.interfaces.model_gateway import (
 )
 from dual_engine_llm import DualEngineLLM
 
+from core.gateway.registry import ModelProviderRegistry
+
 logger = logging.getLogger("ModelGateway")
 
 
 class SovereignModelGateway:
-    def __init__(self, default_privacy_mode: PrivacyMode = PrivacyMode.LOCAL_ONLY):
+    def __init__(
+        self,
+        default_privacy_mode: PrivacyMode = PrivacyMode.LOCAL_ONLY,
+        provider_override: Optional[IModelProvider] = None
+    ):
         self.privacy_mode = default_privacy_mode
+        self._provider_override = provider_override
         self._legacy_llm = DualEngineLLM()
+        self.registry = ModelProviderRegistry()
 
     def set_privacy_mode(self, mode: PrivacyMode):
         self.privacy_mode = mode
@@ -31,6 +39,16 @@ class SovereignModelGateway:
 
     def get_privacy_mode(self) -> PrivacyMode:
         return self.privacy_mode
+
+    def set_provider_override(self, provider: Optional[IModelProvider]):
+        self._provider_override = provider
+
+    def list_providers(self) -> List[Dict[str, Any]]:
+        return self.registry.list_providers()
+
+    async def check_providers_health(self) -> Dict[str, Any]:
+        health_map = await self.registry.check_all_health()
+        return {pid: h.model_dump() for pid, h in health_map.items()}
 
     async def generate(self, request: InferenceRequest) -> InferenceResponse:
         """
@@ -46,6 +64,11 @@ class SovereignModelGateway:
             effective_mode == PrivacyMode.LOCAL_ONLY
             or os.environ.get("AIR_GAP_KILL_SWITCH", "").lower() in ("true", "1", "yes")
         )
+
+        if self._provider_override:
+            if is_airgap and not getattr(self._provider_override, "is_local", False):
+                raise PermissionError("LOCAL_ONLY privacy policy prohibits non-local provider execution.")
+            return await self._provider_override.generate(request)
 
         engine_override = "local" if is_airgap else request.preferred_model
 

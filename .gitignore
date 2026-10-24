@@ -89,15 +89,13 @@ presentation/export/
 audit_ledger.jsonl
 audit_trail.jsonl
 
-# Temporary test & scratch files
-test_*.py
+# Temporary test outputs & scratch files
 test_*.docx
 test_*.pdf
 test_*.png
 test_*.jpg
 test_*.mp3
 test_*.mp4
-tests/
 scratch/
 tmp/
 temp/

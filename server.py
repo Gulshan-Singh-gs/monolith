@@ -2603,17 +2603,53 @@ async def get_pending_agent_actions():
 
 @app.post("/api/agent/approval/respond")
 async def respond_to_action_approval(req: Request):
-    """Submits officer approval or rejection for a paused high-risk agent action."""
+    """Submits officer approval or rejection for a paused high-risk agent action with session authentication."""
     try:
+        # Check workspace lock state
+        profile = profile_mgr._load_profile()
+        if profile.get("is_locked") and profile.get("is_password_protected"):
+            return JSONResponse(
+                status_code=423,
+                content={"error": "Workspace is locked. Approval rejected.", "locked": True}
+            )
+
+        client_ip = req.client.host if req.client else "127.0.0.1"
+        is_local = lan_security_mgr.is_local_client(client_ip)
+
+        # Authenticate operator identity
+        if not is_local:
+            auth_header = req.headers.get("Authorization", "")
+            token = auth_header[7:].strip() if auth_header.startswith("Bearer ") else req.headers.get("X-Session-Token", "")
+            if not token:
+                token = req.cookies.get("sov_lan_token", "")
+            session = lan_security_mgr.validate_session_token(token, client_ip)
+            if not session:
+                return JSONResponse(
+                    status_code=401,
+                    content={"error": "Authentication required. Remote device is not paired with this Workbench.", "code": "AUTH_REQUIRED"}
+                )
+            authenticated_officer = session.get("device_name", "Paired LAN Operator")
+        else:
+            authenticated_officer = profile.get("name") or "Executive Procurement Officer"
+
         body = await req.json()
         action_id = body.get("action_id")
+        if not action_id:
+            return JSONResponse(status_code=400, content={"status": "ERROR", "message": "Missing action_id."})
+
         approved = bool(body.get("approved", False))
-        officer_name = body.get("officer_name", "Executive Procurement Officer")
+        reason = body.get("reason", "")
+        expected_payload_hash = body.get("payload_hash")
+
+        # Never trust arbitrary officer_name in body over authenticated identity
+        officer_name = authenticated_officer
 
         success = governed_agent.submit_decision(
             action_id=action_id,
             approved=approved,
-            officer_name=officer_name
+            officer_name=officer_name,
+            reason=reason,
+            expected_payload_hash=expected_payload_hash
         )
 
         if success:
@@ -2623,14 +2659,17 @@ async def respond_to_action_approval(req: Request):
                 actor=officer_name,
                 risk_level="HIGH",
                 approval_status="APPROVED" if approved else "REJECTED",
-                details={"action_id": action_id, "approved": approved}
+                details={"action_id": action_id, "approved": approved, "reason": reason}
             )
             return {
                 "status": "SUCCESS",
+                "action_id": action_id,
+                "approved": approved,
+                "officer": officer_name,
                 "message": f"Action {action_id} decision recorded ({'APPROVED' if approved else 'REJECTED'})."
             }
         else:
-            return JSONResponse(status_code=404, content={"status": "ERROR", "message": "Pending action not found or expired."})
+            return JSONResponse(status_code=404, content={"status": "ERROR", "message": "Pending action not found, payload mismatch, or expired."})
     except Exception as e:
         return JSONResponse(status_code=500, content={"status": "ERROR", "message": str(e)})
 
@@ -2881,6 +2920,13 @@ async def revoke_paired_device(req: Request):
         return JSONResponse(status_code=404, content={"error": "Session token not found."})
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
+
+
+# ====================================================================
+# MONOLITH AUTONOMOUS CORE ROUTER (WORKSPACE, ORCHESTRATOR, SKILLS, GATEWAY)
+# ====================================================================
+from core.api.routes import router as core_router
+app.include_router(core_router)
 
 
 def find_free_port(default_port: int = 8001, max_tries: int = 50, bind_host: str = "127.0.0.1") -> int:

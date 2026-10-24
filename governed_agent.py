@@ -13,9 +13,11 @@ Enforces deterministic risk classification:
 from enum import Enum
 import asyncio
 import time
+import json
 import uuid
 import hashlib
 import secrets
+from pathlib import Path
 from typing import Dict, Any, List, Optional, Callable
 from pydantic import BaseModel, Field
 
@@ -62,11 +64,14 @@ class AgentActionRequest(BaseModel):
         content = f"{self.action_type}:{self.target}:{json_summary(self.payload)}"
         return hashlib.sha256(content.encode("utf-8")).hexdigest()
 
-    def dict(self, *args, **kwargs):
-        d = super().dict(*args, **kwargs)
+    def model_dump(self, *args, **kwargs):
+        d = super().model_dump(*args, **kwargs)
         d["request_id"] = self.action_id
         d["payload_hash"] = self.payload_hash or self.compute_payload_hash()
         return d
+
+    def dict(self, *args, **kwargs):
+        return self.model_dump(*args, **kwargs)
 
     @property
     def is_allowed(self) -> bool:
@@ -103,9 +108,37 @@ class GovernedAgentController:
         "export", "download", "write_file", "save_draft", "update_config", "reindex"
     }
 
-    def __init__(self):
+    def __init__(self, storage_dir: Optional[Path] = None):
+        self.storage_dir = storage_dir or (Path(__file__).resolve().parent / "output" / ".vault")
+        self.pending_file = self.storage_dir / "pending_approvals.json"
         self.pending_approvals: Dict[str, AgentActionRequest] = {}
         self.approval_futures: Dict[str, asyncio.Future] = {}
+        self.decided_approvals: Dict[str, Dict[str, Any]] = {}
+        self._load_persisted_approvals()
+
+    def _load_persisted_approvals(self):
+        try:
+            if self.pending_file.exists():
+                data = json.loads(self.pending_file.read_text(encoding="utf-8"))
+                for act_dict in data.get("pending", []):
+                    act = AgentActionRequest(**act_dict)
+                    self.pending_approvals[act.action_id] = act
+                self.decided_approvals = data.get("decided", {})
+        except Exception:
+            pass
+
+    def _persist_approvals(self):
+        try:
+            self.storage_dir.mkdir(parents=True, exist_ok=True)
+            payload = {
+                "pending": [a.dict() for a in self.pending_approvals.values()],
+                "decided": self.decided_approvals
+            }
+            tmp = self.pending_file.with_suffix(".tmp")
+            tmp.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+            tmp.replace(self.pending_file)
+        except Exception:
+            pass
 
     def classify_risk(self, action_type: str, description: str, payload: Dict[str, Any]) -> str:
         """
@@ -197,6 +230,7 @@ class GovernedAgentController:
 
         # Action is HIGH risk -> Enter Human-in-the-Loop Approval Gate
         self.pending_approvals[action.action_id] = action
+        self._persist_approvals()
         loop = asyncio.get_event_loop()
         fut = loop.create_future()
         self.approval_futures[action.action_id] = fut
@@ -214,14 +248,29 @@ class GovernedAgentController:
             approved = await asyncio.wait_for(fut, timeout=timeout_seconds)
             action.status = "APPROVED" if approved else "REJECTED"
             action.decided_at = time.strftime("%Y-%m-%d %H:%M:%S")
-            action.decision_reason = "Approved by authorized officer" if approved else "Rejected by officer"
+            if not action.decision_reason:
+                action.decision_reason = "Approved by authorized officer" if approved else "Rejected by officer"
+            self.decided_approvals[action.action_id] = {
+                "approved": approved,
+                "status": action.status,
+                "reason": action.decision_reason,
+                "decided_at": action.decided_at,
+                "officer": action.approved_by or "Authorized Officer"
+            }
         except asyncio.TimeoutError:
-            action.status = "REJECTED"
+            action.status = "EXPIRED"
             action.decided_at = time.strftime("%Y-%m-%d %H:%M:%S")
             action.decision_reason = f"Human approval timed out after {timeout_seconds}s. Safe fallback enforced."
+            self.decided_approvals[action.action_id] = {
+                "approved": False,
+                "status": "EXPIRED",
+                "reason": action.decision_reason,
+                "decided_at": action.decided_at
+            }
         finally:
             self.pending_approvals.pop(action.action_id, None)
             self.approval_futures.pop(action.action_id, None)
+            self._persist_approvals()
 
         if telemetry_cb:
             await emit(telemetry_cb, {
@@ -245,6 +294,13 @@ class GovernedAgentController:
     ) -> bool:
         """Called when user clicks 'Approve' or 'Reject' on the UI modal. Enforces V-08 authorization binding."""
         act_id = request_id or action_id
+        if not act_id:
+            return False
+
+        # Idempotency check: if decision was already recorded, return previous recorded decision
+        if act_id in self.decided_approvals:
+            return bool(self.decided_approvals[act_id].get("approved", False))
+
         officer = (reviewed_by or officer_name or "").strip()
         if not officer:
             return False
@@ -260,6 +316,13 @@ class GovernedAgentController:
                 # Payload was tampered with while pending approval!
                 action.status = "REJECTED"
                 action.decision_reason = "SECURITY ALERT: Action payload was tampered or modified after creation. Approval rejected."
+                self.decided_approvals[act_id] = {
+                    "approved": False,
+                    "status": "REJECTED",
+                    "reason": action.decision_reason,
+                    "decided_at": time.strftime("%Y-%m-%d %H:%M:%S")
+                }
+                self._persist_approvals()
                 self.approval_futures[act_id].set_result(False)
                 return False
 
@@ -269,7 +332,35 @@ class GovernedAgentController:
             action.approved_by = officer
             if reason:
                 action.decision_reason = reason
+            self.decided_approvals[act_id] = {
+                "approved": approved,
+                "status": "APPROVED" if approved else "REJECTED",
+                "reason": action.decision_reason,
+                "officer": officer,
+                "decided_at": time.strftime("%Y-%m-%d %H:%M:%S")
+            }
+            self._persist_approvals()
             self.approval_futures[act_id].set_result(approved)
+            return True
+        return False
+
+    def cancel_approval(self, action_id: str, reason: str = "Action cancelled by authorized operator.") -> bool:
+        """Explicitly cancels a pending approval request."""
+        act_id = action_id
+        if act_id in self.approval_futures and not self.approval_futures[act_id].done():
+            action = self.pending_approvals.get(act_id)
+            if action:
+                action.status = "CANCELLED"
+                action.decided_at = time.strftime("%Y-%m-%d %H:%M:%S")
+                action.decision_reason = reason
+            self.decided_approvals[act_id] = {
+                "approved": False,
+                "status": "CANCELLED",
+                "reason": reason,
+                "decided_at": time.strftime("%Y-%m-%d %H:%M:%S")
+            }
+            self._persist_approvals()
+            self.approval_futures[act_id].set_result(False)
             return True
         return False
 
