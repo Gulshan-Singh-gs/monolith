@@ -1,4 +1,4 @@
-# MONOLITH
+#  MONOLITH
 
 <p align="center">
   <strong>Autonomous Multi-Agent SDLC Platform & Headed Browser Engine</strong>
