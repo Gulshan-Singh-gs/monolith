@@ -14,7 +14,7 @@
 
 ---
 
-## ⚡ What is MONOLITH?
+## What is MONOLITH?
 
 **MONOLITH** is an autonomous, local-first engineering workbench and multi-agent SDLC orchestrator. It bridges the gap between raw LLM generation and end-to-end software delivery by pairing high-performance local AI inference with browser execution, real-time code synthesis, cryptographic provenance, and deterministic execution guards.
 
@@ -22,7 +22,7 @@ With zero cloud subscription lock-in, MONOLITH runs directly on your machine wit
 
 ---
 
-## 🏛️ Core Capabilities
+## Core Capabilities
 
 ### 1. Multi-Agent SDLC Lifecycle Orchestration
 Specialized autonomous agent personas collaborate in lockstep across the full delivery cycle:
@@ -53,7 +53,7 @@ Specialized autonomous agent personas collaborate in lockstep across the full de
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
                                   +---------------------------------------+
@@ -86,7 +86,7 @@ Specialized autonomous agent personas collaborate in lockstep across the full de
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - **Python**: 3.10, 3.11, or 3.12
@@ -148,7 +148,7 @@ Open your browser to:
 
 ---
 
-## 📂 Repository Anatomy
+## Repository Anatomy
 
 ```
 monolith/
@@ -171,7 +171,7 @@ monolith/
 
 ---
 
-## 🔒 Security & Governance
+## Security & Governance
 
 - **Zero-Egress Mode**: In local configuration, all socket calls stay bounded to `127.0.0.1`.
 - **Injection Isolation**: Untrusted inputs, scraped HTML, and uploaded documents are wrapped in strict non-executable boundary tags.
@@ -180,6 +180,6 @@ monolith/
 
 ---
 
-## 📄 License
+## License
 
 Distributed under the **MIT License**. Built with precision for developers who demand complete execution sovereignty.
