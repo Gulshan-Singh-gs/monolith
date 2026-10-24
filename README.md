@@ -2,47 +2,49 @@
 
 <div align="center">
 
-![MONOLITH Hero](landing/assets/01-product-dashboard.png)
+![MONOLITH Platform Architecture](cloudflare_landing/assets/01-product-dashboard.png)
 
 **Smart India Hackathon (SIH 2025) | Problem Statement: PSC26117**  
+**Official Repository:** [https://github.com/Gulshan-Singh-gs/monolith](https://github.com/Gulshan-Singh-gs/monolith)  
 **Classification:** Enterprise-Grade Public Sector Sovereign AI Platform  
-**Architecture:** 100% Air-Gapped Local Execution with Dual-Engine Cloud Burst Fallback  
-**Compliance Standards:** Digital Personal Data Protection (DPDP) Act 2023 | CERT-In Cyber Security Guidelines
+**Deployment Profile:** Air-Gapped Local Execution with Adaptive Dual-Engine Cloud Burst Fallback  
+**Compliance Mandates:** Digital Personal Data Protection (DPDP) Act 2023 | CERT-In Cyber Security Directives  
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688.svg)](https://fastapi.tiangolo.com)
-[![Ollama](https://img.shields.io/badge/Ollama-Local_Inference-black.svg)](https://ollama.ai)
-[![Cloudflare Pages](https://img.shields.io/badge/Cloudflare_Pages-Ready-f38020.svg)](https://pages.cloudflare.com/)
+[![Zero Cloud Leakage](https://img.shields.io/badge/Air--Gap-100%25%20Local-10B981?style=for-the-badge&logo=shield)](https://github.com/Gulshan-Singh-gs/monolith)
+[![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-3B82F6?style=for-the-badge&logo=python)](https://github.com/Gulshan-Singh-gs/monolith)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-059669?style=for-the-badge&logo=fastapi)](https://github.com/Gulshan-Singh-gs/monolith)
+[![Ollama](https://img.shields.io/badge/Ollama-Offline%20LLM-6366F1?style=for-the-badge&logo=ollama)](https://github.com/Gulshan-Singh-gs/monolith)
+[![License: MIT](https://img.shields.io/badge/License-MIT-F59E0B?style=for-the-badge)](LICENSE)
 
 </div>
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
 
 1. [Executive Summary](#executive-summary)
 2. [Strategic Value & Problem Statement](#strategic-value--problem-statement)
 3. [System Architecture](#system-architecture)
-4. [Core Technical Innovations](#core-technical-innovations)
-   - [1. Dual-Engine LLM Router](#1-dual-engine-llm-router)
-   - [2. Instant Cookie Session Vault](#2-instant-cookie-session-vault)
-   - [3. Local Vector RAG & Dual-Engine OCR](#3-local-vector-rag--dual-engine-ocr)
-   - [4. Evidence & Provenance Layer](#4-evidence--provenance-layer)
-   - [5. AI Verification & Anti-Hallucination Guard](#5-ai-verification--anti-hallucination-guard)
-   - [6. Controlled Agent Policy & Human-in-the-Loop Gating](#6-controlled-agent-policy--human-in-the-loop-gating)
-   - [7. Tamper-Evident Chained Audit Ledger](#7-tamper-evident-chained-audit-ledger)
-   - [8. Prompt Injection Defense](#8-prompt-injection-defense)
-   - [9. Hardware Optimization & Model Lifecycle Management](#9-hardware-optimization--model-lifecycle-management)
-   - [10. Local Real-Time Dictation](#10-local-real-time-dictation)
-   - [11. Reproducible Benchmark Suite](#11-reproducible-benchmark-suite)
+4. [Core Technical Modules](#core-technical-modules)
+   - [Dual-Engine LLM Router](#1-dual-engine-llm-router)
+   - [Instant Cookie Session Vault](#2-instant-cookie-session-vault)
+   - [Local Vector RAG & Dual-Engine OCR](#3-local-vector-rag--dual-engine-ocr)
+   - [Evidence & Provenance Layer](#4-evidence--provenance-layer)
+   - [AI Verification & Anti-Hallucination Guard](#5-ai-verification--anti-hallucination-guard)
+   - [Controlled Agent Policy & Human-in-the-Loop Gating](#6-controlled-agent-policy--human-in-the-loop-gating)
+   - [Tamper-Evident Chained Audit Ledger](#7-tamper-evident-chained-audit-ledger)
+   - [Prompt Injection & Untrusted Document Defense](#8-prompt-injection--untrusted-document-defense)
+   - [Hardware Optimization & Model Lifecycle Management](#9-hardware-optimization--model-lifecycle-management)
+   - [Local Real-Time Streaming Dictation (ASR & VAD)](#10-local-real-time-streaming-dictation-asr--vad)
+   - [Reproducible Benchmark Suite](#11-reproducible-benchmark-suite)
+   - [Standalone Cloudflare Pages Landing Portal](#12-standalone-cloudflare-pages-landing-portal)
 5. [Repository Structure](#repository-structure)
-6. [Cloudflare Pages Landing Page Deployment](#cloudflare-pages-landing-page-deployment)
-7. [Hardware & Software Prerequisites](#hardware--software-prerequisites)
-8. [Installation & Setup](#installation--setup)
-9. [Configuration & Environment Variables](#configuration--environment-variables)
-10. [Operational Runbook](#operational-runbook)
-11. [REST API & WebSocket Reference](#rest-api--websocket-reference)
+6. [Hardware & Software Prerequisites](#hardware--software-prerequisites)
+7. [Installation & Setup](#installation--setup)
+8. [Configuration & Environment Variables](#configuration--environment-variables)
+9. [Operational Runbook](#operational-runbook)
+10. [REST API & WebSocket Reference](#rest-api--websocket-reference)
+11. [Testing & Quality Assurance](#testing--quality-assurance)
 12. [SDLC Master Specification Suite](#sdlc-master-specification-suite)
 13. [Security Architecture & Data Sovereignty](#security-architecture--data-sovereignty)
 14. [License & Attribution](#license--attribution)
@@ -51,11 +53,11 @@
 
 ## Executive Summary
 
-The **Sovereign On-Premise Agentic AI Workbench (MONOLITH)** is an air-gapped, privacy-first enterprise platform designed to automate high-friction procurement, document analysis, and administrative workflows for Indian public sector ministries, Public Sector Undertakings (PSUs), defense institutions, and state secretariats.
+**MONOLITH (Sovereign On-Premise Agentic AI Workbench)** is an air-gapped, privacy-first enterprise platform designed to automate high-friction procurement, document analysis, and administrative workflows for Indian public sector ministries, Public Sector Undertakings (PSUs), defense institutions, and state secretariats.
 
 Modern commercial cloud AI solutions introduce severe risks of national data exfiltration, vendor lock-in, and unpredictable recurring subscription costs. Public sector officers routinely handle sensitive tender documents, confidential administrative notes, and authenticated portal credentials that cannot legally or securely leave local administrative workstations.
 
-MONOLITH delivers a zero-recurring-cost, 100% on-premise execution model powered by local open-weight large language models (LLMs) running efficiently on commodity 8GB RAM office hardware. For high-throughput evaluation and demonstration scenarios, the platform incorporates a zero-cost Dual-Engine router that can opportunistically leverage high-speed free cloud tiers (Groq Cloud and Google Gemini) with an immediate physical air-gap kill switch.
+MONOLITH delivers a zero-recurring-cost, 100% on-premise execution model powered by local open-weight large language models (LLMs) running efficiently on commodity 8GB RAM office hardware. For high-throughput evaluation and hackathon demonstration scenarios, the platform incorporates a zero-cost Dual-Engine router that can opportunistically leverage high-speed free cloud tiers (Groq Cloud and Google Gemini) with an immediate physical air-gap kill switch.
 
 ---
 
@@ -70,7 +72,7 @@ MONOLITH delivers a zero-recurring-cost, 100% on-premise execution model powered
 
 ### Solution Impact Metrics
 
-| Metric | Traditional Workflow | Sovereign AI Workbench | Net Operational Benefit |
+| Metric | Traditional Workflow | MONOLITH Workbench | Net Operational Benefit |
 | :--- | :--- | :--- | :--- |
 | **Tender Audit Duration** | 3.5 - 5.0 Hours / Day | Under 45 Seconds | Over 85% reduction in manual effort |
 | **Authentication Overhead** | 6 - 8 OTP cycles / Day | 0 Repeated OTPs | Single-login local AES-256 session persistence |
@@ -88,10 +90,10 @@ The workbench uses a modular, decoupled architecture where the user interface, b
 +-------------------------------------------------------------------------------+
 |                       User Presentation & Client Layer                        |
 |                                                                               |
-|  +---------------------------+  +--------------------+  +------------------+  |
-|  | Single-Page App (Web UI)  |  | Standalone Landing |  | Real-Time WS Feed|  |
-|  | [static/index.html, JS]   |  | [cloudflare_landing|  | [/ws Telemetry]  |  |
-|  +---------------------------+  +--------------------+  +------------------+  |
+|  +---------------------------+  +-------------------+  +--------------------+ |
+|  | Single-Page App (Web UI)  |  | Cloudflare Portal |  | Real-Time WS Feed  | |
+|  | [static/index.html, JS]   |  | [landing/, CDN]   |  | [/ws Telemetry]    | |
+|  +---------------------------+  +-------------------+  +--------------------+ |
 +---------------------------------------+---------------------------------------+
                                         | HTTP / REST / WebSocket
 +---------------------------------------v---------------------------------------+
@@ -108,7 +110,7 @@ The workbench uses a modular, decoupled architecture where the user interface, b
 +--------v--------+            +--------v--------+            +--------v--------+
 |   Dual-Engine   |            | Autonomous Web  |            |   Local Vector  |
 |    LLM Router   |            |  Tender Agent   |            |   RAG Engine    |
-| (dual_engine.py)|            |(tender_agent.py)|            |(local_rag_en...)|
+| (dual_engine.py)|            |(tender_agent.py)|            |(local_rag_en...) |
 +--------+--------+            +--------+--------+            +--------+--------+
          |                              |                              |
     +----+----+                    +----+----+                    +----+----+
@@ -120,12 +122,21 @@ The workbench uses a modular, decoupled architecture where the user interface, b
 +-------+ +-------+          +-------+ +-------+          +-------+ +-------+
 ```
 
+### Flow of Operations
+
+1. **Client Request:** The browser connects over HTTP and upgrades to WebSocket (`/ws`) for bi-directional event notifications.
+2. **Access Control:** The Workspace Lock Middleware verifies session status. If locked, requests return HTTP 423 (Locked) until unlocked via password, security answers, or physical emergency token.
+3. **Execution Routing:**
+   - **Tender Inquiries:** Handled by `TenderAgent`, driving Playwright across live or mock portal environments using credentials from `CookieVault`.
+   - **Document Intelligence:** Parsed by `DocumentProcessor` using client-side Canvas and server-side OCR, chunked, and indexed by `LocalRAGEngine`.
+   - **Inference Synthesis:** Dispatched to `DualEngineLLM`, which selects between the local Ollama instance or the high-speed cloud burst tier based on connectivity, hardware profile, and user configuration.
+
 ---
 
-## Core Technical Innovations
+## Core Technical Modules
 
 ### 1. Dual-Engine LLM Router
-*File: [`dual_engine_llm.py`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/dual_engine_llm.py)*
+*File: [`dual_engine_llm.py`](dual_engine_llm.py)*
 
 The DualEngineLLM client implements an adaptive routing strategy:
 - **Local Sovereign Engine:** Interfaces with local Ollama daemons (`http://127.0.0.1:11434`) targeting quantized open-weight models such as `llama3.2:1b`, `llama3.2:3b`, `deepseek-r1:1.5b`, or `mistral`. Ensures complete air-gap compliance with zero packets leaving the host.
@@ -133,7 +144,7 @@ The DualEngineLLM client implements an adaptive routing strategy:
 - **Failover & Air-Gap Kill Switch:** In the event of network disruption or when the air-gap toggle is enforced (`AIR_GAP_KILL_SWITCH_ACTIVE = True`), the engine strictly routes all prompts to the local open-weight model with automatic payload truncation and context optimization.
 
 ### 2. Instant Cookie Session Vault
-*File: [`cookie_vault.py`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/cookie_vault.py)*
+*File: [`cookie_vault.py`](cookie_vault.py)*
 
 Addresses government portal session drops without compromising security:
 - **Cryptographic Storage:** Browser session tokens, cookies, and local authentication state are encrypted at rest using AES-256 (Fernet specification) inside `session_vault/cookie_vault.json`.
@@ -141,7 +152,7 @@ Addresses government portal session drops without compromising security:
 - **Zero OTP Re-Entry:** Officers authenticate manually once; all subsequent automated workflows inherit the live session, completely bypassing recurring SMS/email OTP prompts.
 
 ### 3. Local Vector RAG & Dual-Engine OCR
-*Files: [`local_rag_engine.py`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/local_rag_engine.py), [`document_processor.py`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/document_processor.py)*
+*Files: [`local_rag_engine.py`](local_rag_engine.py), [`document_processor.py`](document_processor.py)*
 
 Provides document parsing and semantic indexing for procurement files:
 - **Dual-Engine OCR Architecture:** Offloads intensive OCR tasks across a balanced client-server pipeline. The web client processes visual pages using HTML5 Canvas and Tesseract.js, while the backend leverages `pypdfium2` and `pytesseract` to split and merge large document batches without blocking the event loop.
@@ -149,7 +160,7 @@ Provides document parsing and semantic indexing for procurement files:
 - **Local Vector Indexing:** Employs lightweight TF-IDF and dense embedding representations stored in local JSON/SQLite stores, executing vector cosine similarity ranking without requiring external vector database infrastructure.
 
 ### 4. Evidence & Provenance Layer
-*File: [`provenance_engine.py`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/provenance_engine.py)*
+*File: [`provenance_engine.py`](provenance_engine.py)*
 
 Provides complete chain-of-evidence traceability for every AI-generated conclusion:
 - **Granular Evidence Citations:** Associates every claim with exact document identifiers, verified page numbers, section clauses, and character offset boundaries.
@@ -157,7 +168,7 @@ Provides complete chain-of-evidence traceability for every AI-generated conclusi
 - **Evidence Sufficiency Check:** Quantifies the proportion of user inquiry concepts grounded in indexed documents. If grounding coverage is below 30%, the system explicitly abstains rather than inventing speculative claims.
 
 ### 5. AI Verification & Anti-Hallucination Guard
-*File: [`verification_engine.py`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/verification_engine.py)*
+*File: [`verification_engine.py`](verification_engine.py)*
 
 Executes a deterministic claim-checking pipeline prior to presenting outputs to officers:
 - **Concordance Evaluation:** Classifies responses into explicit categories: `SUPPORTED`, `PARTIALLY_SUPPORTED`, `UNSUPPORTED`, `CONTRADICTED`, `INSUFFICIENT_EVIDENCE`, and `REQUIRES_HUMAN_REVIEW`.
@@ -165,7 +176,7 @@ Executes a deterministic claim-checking pipeline prior to presenting outputs to 
 - **Zero Fabricated Probabilities:** Rejects uncalibrated statistical pseudo-probabilities, preferring transparent claim-matching and explicit abstention.
 
 ### 6. Controlled Agent Policy & Human-in-the-Loop Gating
-*File: [`governed_agent.py`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/governed_agent.py)*
+*File: [`governed_agent.py`](governed_agent.py)*
 
 Enforces deterministic risk-tiered governance over autonomous browser and system actions:
 - **Deterministic Risk Tiers:**
@@ -175,7 +186,7 @@ Enforces deterministic risk-tiered governance over autonomous browser and system
 - **Human-in-the-Loop Gate:** High-impact operations immediately pause agent execution and present an authorization modal displaying the intended action, target URL, and payload. Execution proceeds only upon explicit officer approval.
 
 ### 7. Tamper-Evident Chained Audit Ledger
-*File: [`audit_ledger.py`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/audit_ledger.py)*
+*File: [`audit_ledger.py`](audit_ledger.py)*
 
 Provides cryptographic non-repudiation and auditable records stored in `output/.vault/audit_trail.jsonl`:
 - **SHA-256 Block Chaining:** Each event record incorporates the SHA-256 hash of the preceding event, forming an immutable ledger.
@@ -183,34 +194,43 @@ Provides cryptographic non-repudiation and auditable records stored in `output/.
 - **Zero Secret Leakage:** Automatically redacts passwords, session cookies, auth tokens, and API credentials from logged event details.
 
 ### 8. Prompt Injection & Untrusted Document Defense
-*File: [`injection_guard.py`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/injection_guard.py)*
+*File: [`injection_guard.py`](injection_guard.py)*
 
 Treats all external documents, PDFs, OCR results, and scraped web content as untrusted input:
 - **Injection Sanitization:** Neutralizes jailbreaks, directive overrides (`"Ignore previous instructions"`), and exfiltration vectors.
 - **Structural Demarcation:** Formats prompts with strict XML/markdown boundaries separating system policy from passive document context.
 
 ### 9. Hardware Optimization & Model Lifecycle Management
-*File: [`ollama_manager.py`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/ollama_manager.py)*
+*File: [`ollama_manager.py`](ollama_manager.py)*
 
 Provides programmatic governance over host machine compute resources:
-- **Hardware Telemetry:** Senses available host RAM, CPU topology, and GPU presence. Recommends optimal model quantization (e.g., 1B/3B models for 8GB RAM workstations).
-- **Lifecycle Control:** Programmatically initiates the `ollama serve` process, monitors model download streams, switches active models in RAM, and unloads dormant models to conserve host memory.
+- **Hardware Telemetry:** Senses available host RAM, CPU topology, and GPU presence. Recommends optimal model quantization (e.g. recommending 1B/3B parameter models for 8GB RAM workstations).
+- **Lifecycle Control:** Programmatically initiates the `ollama serve` background process, monitors model download streams, provides pause/resume/cancel capabilities, switches active models in RAM, and unloads dormant models to conserve host memory.
 
-### 10. Local Real-Time Dictation (ASR & VAD)
-*File: [`dictation_engine.py`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/dictation_engine.py)*
+### 10. Local Real-Time Streaming Dictation (ASR & VAD)
+*File: [`dictation_engine.py`](dictation_engine.py)*
 
 Provides native, 100% on-premise streaming speech-to-text directly into the prompt workflow:
-- **Zero Cloud Leakage:** All microphone audio is captured and transcribed strictly on local CPU; no external speech APIs or telemetry are invoked.
-- **Interchangeable Engine Abstraction:** Supports lightweight Kaldi-based **Vosk** and real-time neural ONNX **Moonshine**.
-- **Energy VAD:** Suppresses ASR compute during silence and detects utterance boundaries to conserve CPU.
-- **WebSocket Streaming:** Streams 16kHz mono PCM chunks with continuous partial and final text insertion directly into the UI.
+- **Zero Cloud Leakage:** All microphone audio is captured and transcribed strictly on the local workstation CPU; no external speech APIs or telemetry are ever invoked.
+- **Interchangeable ASREngine Abstraction:** Decouples recognition models from the application layer, supporting lightweight Kaldi-based **Vosk** and real-time neural ONNX **Moonshine**.
+- **Capability Matrix & Language Registry:** Dynamically validates language and model compatibility across English, Hindi, and Punjabi, blocking incompatible engine combinations while offering seamless auto-selection.
+- **Lightweight Energy VAD:** Suppresses ASR compute during silence and detects utterance boundaries to optimize performance on commodity hardware.
+- **WebSocket Streaming:** Streams 16kHz mono PCM chunks and provides continuous partial and final text insertion directly into the main prompt textarea.
 
 ### 11. Reproducible Benchmark Suite
-*File: [`benchmark_engine.py`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/benchmark_engine.py)*
+*File: [`benchmark_engine.py`](benchmark_engine.py)*
 
 Provides a standardized evaluation suite measuring actual hardware capabilities:
 - Measures evidence extraction latency, verification claim evaluation throughput, numeric contradiction recall, and injection defense latency.
 - Accessible via REST endpoint `GET /api/system/benchmark`.
+
+### 12. Standalone Cloudflare Pages Landing Portal
+*Directory: [`cloudflare_landing/`](cloudflare_landing/)*
+
+A zero-backend, client-side distribution folder engineered for instant deployment to Cloudflare Pages:
+- **100% Self-Contained Assets:** Packaged with local Orbitron and Inter fonts, local Three.js runtime (`assets/three.min.js`), and WebGL canvas shaders.
+- **Cloudflare Edge Rules:** Pre-configured with [`_headers`](cloudflare_landing/_headers) (strict security policies, 1-year immutable caching for fonts and 3D runtimes) and [`_redirects`](cloudflare_landing/_redirects) for clean SPA fallback.
+- **Instant Deployment:** Ready for drag-and-drop or GitHub integration directly on Cloudflare Pages without a Node.js or Python build step.
 
 ---
 
@@ -224,66 +244,53 @@ Provides a standardized evaluation suite measuring actual hardware capabilities:
 |-- local_rag_engine.py               # Vector search, document chunking, and RAG
 |-- document_processor.py             # OCR engine, PDF rasterizer, table extractor
 |-- tender_agent.py                   # Autonomous procurement browser automation
+|-- monolith_browser_engine.py        # Headed browser automation controller
 |-- cookie_vault.py                   # Encrypted AES-256 portal session persistence
 |-- profile_manager.py                # Workspace security, lock state, recovery
+|-- audit_ledger.py                   # Cryptographic SHA-256 Merkle chained audit ledger
+|-- verification_engine.py            # Anti-hallucination fact verification engine
+|-- provenance_engine.py              # Chain-of-evidence citation tracking
+|-- injection_guard.py                # Prompt injection and jailbreak defense
+|-- dictation_engine.py               # Local streaming speech-to-text (ASR + VAD)
+|-- benchmark_engine.py               # Automated performance and latency benchmark suite
 |-- ollama_manager.py                 # Local Ollama daemon and model management
-|-- audit_ledger.py                   # Cryptographic SHA-256 tamper-evident ledger
-|-- verification_engine.py            # Claim verification & anti-hallucination engine
-|-- provenance_engine.py              # Evidence extraction and attribution tracker
-|-- injection_guard.py                # Prompt injection and adversarial filter
-|-- dictation_engine.py               # Local offline speech-to-text engine
-|-- benchmark_engine.py               # Automated performance & accuracy benchmark
+|-- lan_security_manager.py           # LAN discovery and peer validation
+|-- mdns_service.py                   # Local mDNS discovery daemon
+|-- setup_wizard.py                   # Interactive local configuration wizard
 |-- requirements.txt                  # Python dependencies
+|-- package.json                      # Node.js dependencies
 |
-|-- cloudflare_landing/               # 🚀 Standalone Cloudflare Pages landing package
-|   |-- index.html                    # Decoupled standalone landing page
-|   |-- style.css                     # Obsidian & Titanium dark mode theme
-|   |-- app.js                        # Client-side WebGL shaders & interactive simulators
-|   |-- _headers                      # Cloudflare Pages security & immutable cache rules
-|   |-- _redirects                    # Cloudflare Pages SPA fallback routing
-|   `-- assets/                       # Self-contained fonts, Three.js, and card assets
+|-- Start/                            # Automated Windows quick-start bundle
+|   |-- Launch_MONOLITH.bat           # Production desktop launcher
+|   `-- START_HERE.txt                # Operational setup instructions
 |
-|-- landing/                          # Source landing page served locally by server.py
-|   |-- index.html
-|   |-- style.css
-|   |-- app.js
-|   `-- assets/
-|
-|-- static/                           # Workbench application frontend
-|   |-- index.html                    # Main single-page application interface
+|-- static/                           # Sovereign Workbench primary web application
+|   |-- index.html                    # Main single-page application markup
 |   |-- app.js                        # Frontend UI controllers and WebSocket clients
 |   `-- style.css                     # Neumorphic CSS design system
 |
+|-- landing/                          # Full interactive product landing portal
+|   |-- index.html                    # Landing page with interactive WebGL shaders
+|   |-- app.js                        # Client-side simulators (SDLC, Browser, Merkle, ROI)
+|   |-- style.css                     # Obsidian & Titanium dark design system
+|   `-- assets/                       # High-res preview cards, local fonts, Three.js
+|
+|-- cloudflare_landing/               # Standalone Cloudflare Pages deployment export
+|   |-- index.html                    # Decoupled static landing page
+|   |-- app.js                        # 100% Client-side interactive engine
+|   |-- style.css                     # Mobile-responsive CSS layout
+|   |-- _headers                      # Cloudflare security and cache-control rules
+|   |-- _redirects                    # Cloudflare SPA fallback routing
+|   `-- assets/                       # Local fonts, 3D runtime, preview graphics
+|
 |-- output/                           # System outputs, uploads, and specifications
 |   |-- SDLC_Master_Specification.md  # Comprehensive 13-document SDLC master suite
-|   |-- 01_BRD.md to 14_Settings.md   # Individual formal engineering specifications
-|   `-- .vault/                       # Encrypted profiles and audit trail
+|   |-- 01_BRD.md to 14_Spec.md       # Individual formal engineering artifacts
+|   `-- .vault/                       # Cryptographic storage & audit trails
 |
 `-- session_vault/                    # Encrypted local credential storage
     `-- cookie_vault.json             # AES-256 encrypted session tokens
 ```
-
----
-
-## 🚀 Cloudflare Pages Landing Page Deployment
-
-The [`cloudflare_landing/`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/cloudflare_landing) folder is completely self-contained with **zero backend dependencies**, local fonts, bundled Three.js runtime, security headers, and direct links to the official repository.
-
-### Option 1: Direct Drag & Drop (Instant)
-1. Go to the [Cloudflare Dashboard](https://dash.cloudflare.com/) &rarr; **Workers & Pages** &rarr; **Overview**.
-2. Click **Create application** &rarr; select the **Pages** tab.
-3. Choose **Upload assets**.
-4. Set a project name (e.g., `monolith-landing`).
-5. Drag and drop the `cloudflare_landing/` directory into the upload zone.
-6. Click **Deploy site**.
-
-### Option 2: Connect to Git Repository
-1. In Cloudflare Pages, choose **Connect to Git** &rarr; select `Gulshan-Singh-gs/monolith`.
-2. Configure build settings:
-   - **Framework preset:** `None`
-   - **Build command:** *(leave blank)*
-   - **Build output directory:** `cloudflare_landing`
-3. Click **Save and Deploy**. Cloudflare will automatically build and publish updates on every push.
 
 ---
 
@@ -303,6 +310,7 @@ The [`cloudflare_landing/`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench
 
 - **Operating System:** Windows 10/11 (64-bit), Ubuntu 22.04+ LTS, or macOS 13+
 - **Python Runtime:** Python 3.10, 3.11, or 3.12
+- **Node.js Runtime:** Node.js 18.x or 20.x with npm
 - **Local AI Daemon:** Ollama (version 0.3.0 or higher)
 - **Web Browser:** Chromium, Google Chrome, or Microsoft Edge
 
@@ -310,7 +318,9 @@ The [`cloudflare_landing/`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench
 
 ## Installation & Setup
 
-### 1. Clone Repository
+### 1. Repository Setup
+
+Clone the repository and enter the project directory:
 
 ```bash
 git clone https://github.com/Gulshan-Singh-gs/monolith.git
@@ -318,6 +328,8 @@ cd monolith
 ```
 
 ### 2. Python Environment Setup
+
+Create and activate a dedicated virtual environment:
 
 ```bash
 # Windows (PowerShell)
@@ -329,11 +341,16 @@ python3 -m venv venv
 source venv/bin/activate
 ```
 
-Install Python dependencies:
+Install the required Python packages:
 
 ```bash
 pip install --upgrade pip
 pip install -r requirements.txt
+```
+
+Initialize Playwright browser binaries:
+
+```bash
 playwright install chromium
 ```
 
@@ -348,9 +365,9 @@ playwright install chromium
    ```bash
    ollama serve
    ```
-3. Pull the recommended local model:
+3. Pull the recommended lightweight local open-weight model:
    ```bash
-   # 8GB RAM configuration
+   # Standard 8GB RAM configuration
    ollama pull llama3.2:1b
 
    # 16GB RAM configuration (Optional)
@@ -361,7 +378,7 @@ playwright install chromium
 
 ## Configuration & Environment Variables
 
-Create a `.env` file in the project root to customize runtime parameters:
+The application runs out-of-the-box with zero configuration using default local parameters. To enable optional cloud burst capabilities during evaluation, configure a `.env` file in the project root:
 
 ```ini
 # Server Configuration
@@ -375,7 +392,7 @@ PREFERRED_ENGINE=local
 LOCAL_MODEL=llama3.2:1b
 OLLAMA_URL=http://127.0.0.1:11434
 
-# Optional Cloud Burst Free Tier Credentials (Evaluation / Demo Mode)
+# Optional Cloud Burst Free Tier Credentials (Evaluation Mode)
 GROQ_API_KEY=gsk_your_free_groq_key_here
 GEMINI_API_KEY=AIzaSy_your_free_gemini_key_here
 
@@ -390,23 +407,28 @@ AIR_GAP_KILL_SWITCH=false
 
 ### Starting the Workbench
 
-#### Method A: Windows One-Click Launcher
-Double-click `Launch_Sovereign_Workbench.bat` or run:
+#### Method A: Windows One-Click Launcher (Recommended)
+Run [`Launch_Sovereign_Workbench.bat`](Launch_Sovereign_Workbench.bat) or [`Start/Launch_MONOLITH.bat`](Start/Launch_MONOLITH.bat):
 ```cmd
 Launch_Sovereign_Workbench.bat
 ```
+The script automatically:
+1. Detects whether the local Ollama daemon is active and launches it if stopped.
+2. Starts the FastAPI server on port 8001.
+3. Automatically opens the MONOLITH interface in your default browser.
 
 #### Method B: Manual Command Line
+Ensure your virtual environment is active and run:
 ```bash
 python server.py
 ```
 
 ### Accessing Interfaces
 
-- **Interactive Workbench UI:** [`http://127.0.0.1:8001/`](http://127.0.0.1:8001/)
-- **Landing Page (Local):** [`http://127.0.0.1:8001/landing/`](http://127.0.0.1:8001/landing/)
-- **Swagger API Documentation:** [`http://127.0.0.1:8001/docs`](http://127.0.0.1:8001/docs)
-- **ReDoc Specification:** [`http://127.0.0.1:8001/redoc`](http://127.0.0.1:8001/redoc)
+- **MONOLITH Studio Workspace:** Open `http://127.0.0.1:8001/` in your browser.
+- **Product Landing Page:** Open `http://127.0.0.1:8001/landing/` in your browser.
+- **Interactive API Documentation (Swagger UI):** Open `http://127.0.0.1:8001/docs`.
+- **Interactive API Documentation (ReDoc):** Open `http://127.0.0.1:8001/redoc`.
 
 ---
 
@@ -416,11 +438,10 @@ python server.py
 
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
-| `GET` | `/` | Serves the main workbench single-page application. |
-| `GET` | `/api/status` | Returns workbench health, engine status, and vault counts. |
+| `GET` | `/` | Serves the main workbench frontend single-page application. |
+| `GET` | `/api/status` | Returns workbench health, engine status, and vault session counts. |
 | `GET` | `/api/hardware` | Returns host CPU, physical RAM, and GPU detection telemetry. |
 | `WS` | `/ws` | Real-time WebSocket connection for live agent updates and OCR telemetry. |
-| `WS` | `/ws/dictation` | Streaming WebSocket for real-time local speech-to-text. |
 
 ### Procurement Agent Endpoints
 
@@ -447,44 +468,44 @@ python server.py
 | :--- | :--- | :--- |
 | `GET` | `/api/ollama/models` | Lists all local models currently stored on the host machine. |
 | `POST` | `/api/ollama/pull` | Starts an asynchronous stream to download a new open-weight model. |
-| `GET` | `/api/ollama/pull-status`| Polls progress for active model download streams. |
+| `GET` | `/api/ollama/pull-status` | Polls progress for active model download streams. |
 | `POST` | `/api/ollama/switch` | Replaces the active model residing in host RAM. |
 | `POST` | `/api/ollama/unload` | Ejects models from memory to free host RAM for other tasks. |
 | `DELETE`| `/api/ollama/delete` | Removes a downloaded model from local storage. |
 
-### Workspace Security & Audit Ledger
+### Workspace Security & Lock Management
 
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
 | `GET` | `/api/profile` | Fetches active profile settings, lock state, and protection status. |
-| `POST` | `/api/profile/lock` | Activates global workspace lock (enforces HTTP 423 on protected APIs). |
+| `POST` | `/api/profile/lock` | Activates global workspace lock (enforcing HTTP 423 on protected APIs). |
 | `POST` | `/api/profile/unlock` | Authenticates master password to disengage workspace lock. |
-| `GET` | `/api/audit/trail` | Fetches cryptographic audit events. |
-| `GET` | `/api/audit/verify` | Verifies SHA-256 block chain integrity from genesis to head. |
+| `POST` | `/api/profile/recover` | Verifies security question answers to restore administrative access. |
+| `POST` | `/api/profile/recover-physical` | Validates emergency physical token key to recover locked workspace. |
 
 ---
 
 ## SDLC Master Specification Suite
 
-All formal engineering artifacts are versioned in the [`output/`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/output) directory:
+All engineering specifications for this project are formally tracked in the `output/` directory and referenced in `output/manifest.json`.
 
 | ID | Document Name | Purpose & Coverage |
 | :--- | :--- | :--- |
-| 01 | [`01_BRD.md`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/output/01_BRD.md) | Business Requirements Document: Problem analysis, market sizing, ROI models. |
-| 02 | [`02_PRD.md`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/output/02_PRD.md) | Product Requirements Document: Functional requirements, user personas. |
-| 03 | [`03_User_Journeys.md`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/output/03_User_Journeys.md) | Step-by-step user journey maps for administrative desk officers. |
-| 04 | [`04_UI_UX_Specs.md`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/output/04_UI_UX_Specs.md) | Interface guidelines, design tokens, layout hierarchy. |
-| 05 | [`05_Architecture_Diagram.md`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/output/05_Architecture_Diagram.md) | Detailed architectural schematics and data flow diagrams. |
-| 06 | [`06_TRD.md`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/output/06_TRD.md) | Technical Requirements Document: Latency budgets, memory bounds. |
-| 07 | [`07_Detailed_Design.md`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/output/07_Detailed_Design.md) | Class models, database schemas, and cryptographic definitions. |
-| 08 | [`08_API_Contract_OpenAPI.md`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/output/08_API_Contract_OpenAPI.md) | Complete OpenAPI 3.1 specification for all REST and WebSocket routes. |
-| 09 | [`09_Implementation_Plan.md`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/output/09_Implementation_Plan.md) | Milestones, sprint schedules, and development phase breakdowns. |
-| 10 | [`10_Test_Strategy.md`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/output/10_Test_Strategy.md) | Quality assurance strategy, unit test coverage, and security testing. |
-| 11 | [`11_ADRs.md`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/output/11_ADRs.md) | Architectural Decision Records: Framework, engine, and crypto choices. |
-| 12 | [`12_Security_Compliance.md`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/output/12_Security_Compliance.md) | Compliance audits for DPDP Act 2023, CERT-In, and air-gap guidelines. |
-| 13 | [`13_Runbook_Deployment.md`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/output/13_Runbook_Deployment.md) | Production installation, air-gapped provisioning, and operational runbook. |
-| 14 | [`14_Settings_Profile_Ollama_Spec.md`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/output/14_Settings_Profile_Ollama_Spec.md) | Host resource governor, profile management, and model quantization spec. |
-| **Suite** | [`SDLC_Master_Specification.md`](file:///c:/Users/Code66/Music/Sovereign_AI_Workbench_Clean/output/SDLC_Master_Specification.md) | Master single-file compilation of all 14 engineering specifications. |
+| 01 | `01_BRD.md` | Business Requirements Document: Problem analysis, market sizing, ROI models. |
+| 02 | `02_PRD.md` | Product Requirements Document: Functional requirements, user personas. |
+| 03 | `03_User_Journeys.md` | Step-by-step user journey maps for administrative desk officers. |
+| 04 | `04_UI_UX_Specs.md` | Interface guidelines, design tokens, layout hierarchy. |
+| 05 | `05_Architecture_Diagram.md` | Detailed architectural schematics and data flow diagrams. |
+| 06 | `06_TRD.md` | Technical Requirements Document: Latency budgets, memory bounds. |
+| 07 | `07_Detailed_Design.md` | Class models, database schemas, and cryptographic definitions. |
+| 08 | `08_API_Contract_OpenAPI.md`| Complete OpenAPI 3.1 specification for all REST and WebSocket routes. |
+| 09 | `09_Implementation_Plan.md` | Milestones, sprint schedules, and development phase breakdowns. |
+| 10 | `10_Test_Strategy.md` | Quality assurance strategy, unit test coverage, and security testing. |
+| 11 | `11_ADRs.md` | Architectural Decision Records: Framework, engine, and crypto choices. |
+| 12 | `12_Security_Compliance.md` | Compliance audits for DPDP Act 2023, CERT-In, and air-gap guidelines. |
+| 13 | `13_Runbook_Deployment.md` | Production installation, air-gapped provisioning, and operational runbook. |
+| 14 | `14_Settings_Profile_Ollama_Spec.md` | Model lifecycle and security profile technical specification. |
+| Suite | `SDLC_Master_Specification.md` | Comprehensive single-file compilation of all 14 specifications. |
 
 ---
 
@@ -492,14 +513,15 @@ All formal engineering artifacts are versioned in the [`output/`](file:///c:/Use
 
 ### Regulatory & Legal Compliance
 
-- **Digital Personal Data Protection (DPDP) Act 2023:** Citizen records, tender bids, and officer identifiers never transit through overseas cloud servers.
-- **CERT-In Cyber Security Guidelines:** Local encryption at rest, memory sanitation, least-privilege system process execution, and strict air-gap boundary isolation.
+MONOLITH is engineered to meet Indian public sector compliance mandates:
+- **Digital Personal Data Protection (DPDP) Act 2023:** Guarantees that citizen records, tender bids, and officer identifiers never transit through overseas cloud servers.
+- **CERT-In Cyber Security Guidelines:** Enforces local encryption at rest, memory sanitation, least-privilege system process execution, and strict air-gap boundary isolation.
 
-### Technical Safeguards
+### Technical Security Safeguards
 
 1. **Air-Gap Boundary Isolation:** When set to sovereign execution mode, all socket communication is restricted to `127.0.0.1`. No outbound network packets are emitted.
-2. **Payload Protection (TRG-008):** A strict 50 MB hard limit is enforced on all file ingestion endpoints (`MAX_UPLOAD_BYTES = 52428800`) to prevent memory exhaustion and denial-of-service attacks.
-3. **Cryptographic Storage:** `CookieVault` encrypts credentials using AES-256 with key derivation tied to the host system profile.
+2. **Payload Protection (TRG-008):** A strict 50 MB hard limit is enforced on all file ingestion endpoints (`MAX_UPLOAD_BYTES = 52428800`) to prevent memory exhaustion and denial-of-service vulnerabilities.
+3. **Cryptographic Storage:** The `CookieVault` encrypts credentials using AES-256 with key derivation tied to the host system profile.
 4. **Physical Token Recovery:** Administrative recovery is decoupled from cloud identity providers, relying entirely on local cryptographic proof and physical media tokens.
 
 ---
@@ -508,4 +530,4 @@ All formal engineering artifacts are versioned in the [`output/`](file:///c:/Use
 
 Distributed under the **MIT License**.
 
-Engineered for the **Smart India Hackathon (SIH 2025)** addressing **Problem Statement PSC26117** in alignment with national initiatives for technological sovereignty and self-reliance (*Atmanirbhar Bharat*).
+Developed for the **Smart India Hackathon (SIH 2025)** addressing **Problem Statement PSC26117**. Engineered in alignment with national initiatives for technological sovereignty and self-reliance (*Atmanirbhar Bharat*).
