@@ -14,11 +14,15 @@
 
 ---
 
-## What is MONOLITH?
+## About
 
-**MONOLITH** is an autonomous, local-first engineering workbench and multi-agent SDLC orchestrator. It bridges the gap between raw LLM generation and end-to-end software delivery by pairing high-performance local AI inference with browser execution, real-time code synthesis, cryptographic provenance, and deterministic execution guards.
+Modern software engineering with generative AI faces three fundamental bottlenecks: **fragmented workflows**, **opaque hallucination risk**, and **loss of data sovereignty**. Most developer tools treat LLMs merely as text autocomplete engines running on remote cloud clusters, leaving developers to manually copy-paste code, run external terminal commands, navigate web portals, and worry about proprietary codebase exfiltration.
 
-With zero cloud subscription lock-in, MONOLITH runs directly on your machine with full data privacy, an instantaneous hardware kill-switch, and a cryptographic audit ledger for every synthetic artifact produced.
+**MONOLITH** was engineered from the ground up as a unified, autonomous software factory:
+- **Autonomous Execution over Passive Suggestions**: Rather than just producing code snippets in a vacuum, MONOLITH deploys autonomous agent personas that plan, architect, scaffold, test, and run full-stack solutions end-to-end.
+- **Physical Headed Browser Runtime**: Powered by Playwright, MONOLITH directly drives browser viewports, automates complex enterprise portals, downloads assets, and tests live web applications in real time without human intervention.
+- **Strict Data Sovereignty**: Operates 100% locally on commodity hardware using open-weight models via Ollama. No code leaves your workstation unless you explicitly burst to cloud tiers.
+- **Mathematical Integrity**: Every artifact, prompt, and execution step is cryptographically hashed with SHA-256 and anchored in a tamper-evident Merkle audit chain, delivering complete non-repudiation and traceability.
 
 ---
 
