@@ -198,3 +198,24 @@ class AIVerificationEngine:
             contradictions=contradictions,
             verification_statement=statement
         )
+
+    @classmethod
+    async def verify_async(
+        cls,
+        answer: str = "",
+        evidence_bundle: Optional[EvidenceBundle] = None,
+        model_name: Optional[str] = None,
+        generated_answer: Optional[str] = None
+    ) -> VerificationResult:
+        """
+        Asynchronously executes verification pipeline in a worker threadpool,
+        preventing event loop blocking during heavy NLP/regex matching on large documents.
+        """
+        import asyncio
+        return await asyncio.to_thread(
+            cls.verify,
+            answer=answer,
+            evidence_bundle=evidence_bundle,
+            model_name=model_name,
+            generated_answer=generated_answer
+        )

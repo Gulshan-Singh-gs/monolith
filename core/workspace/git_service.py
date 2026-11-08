@@ -136,8 +136,10 @@ class GitService:
             return False, "Not a git repository."
 
         branch_name = custom_name or f"task/{task_id[:12]}"
-        # Sanitize branch name
-        sanitized = "".join(c if c.isalnum() or c in ("-", "_", "/") else "_" for c in branch_name)
+        # Sanitize branch name strictly against flags and injection characters
+        sanitized = "".join(c if c.isalnum() or c in ("-", "_", "/") else "_" for c in branch_name).lstrip("-")
+        if not sanitized:
+            return False, "Invalid branch name."
 
         res = await self.broker.execute_command(f"git checkout -b {sanitized}", cwd=self.workspace_root)
         if res.exit_code == 0:

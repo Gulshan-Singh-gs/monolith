@@ -1402,9 +1402,37 @@ document.addEventListener("DOMContentLoaded", () => {
   // ====================================================================
   // 7. ASSISTANT OUTPUT FRAME CONTROLLER (FREE FROM RAW MARKDOWN)
   // ====================================================================
+  function sanitizeHtml(htmlStr) {
+    if (!htmlStr) return "";
+    if (typeof window !== "undefined" && window.DOMPurify && typeof window.DOMPurify.sanitize === "function") {
+      return window.DOMPurify.sanitize(htmlStr, {
+        USE_PROFILES: { html: true },
+        ALLOWED_ATTR: ["class", "style", "id", "data-variant", "role", "href", "target", "rel", "title"]
+      });
+    }
+    // Fallback parser-based neutralization if DOMPurify CDN is unavailable offline
+    try {
+      const doc = new DOMParser().parseFromString(htmlStr, "text/html");
+      const badTags = doc.querySelectorAll("script, iframe, object, embed, link, meta, style, base");
+      badTags.forEach(el => el.remove());
+      const allEls = doc.querySelectorAll("*");
+      allEls.forEach(el => {
+        for (const attr of Array.from(el.attributes)) {
+          if (attr.name.toLowerCase().startsWith("on") || attr.value.toLowerCase().includes("javascript:")) {
+            el.removeAttribute(attr.name);
+          }
+        }
+      });
+      return doc.body.innerHTML;
+    } catch (_) {
+      return escapeHtml(htmlStr);
+    }
+  }
+
   function cleanInlineMarkdown(str) {
     if (!str) return "";
-    let s = str;
+    // First escape raw HTML to prevent injection via markdown strings
+    let s = escapeHtml(str);
     // Replace bold **text** with <strong>text</strong>
     s = s.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
     // Replace italic *text* or _text_ with <em>text</em>
@@ -1666,9 +1694,9 @@ document.addEventListener("DOMContentLoaded", () => {
     lastAssistantCleanText = typeof rawText === "string" ? rawText : JSON.stringify(rawText, null, 2);
     if (assistantFrameHeading) assistantFrameHeading.innerText = heading;
     if (modularBlocks && Array.isArray(modularBlocks)) {
-      assistantFrameContent.innerHTML = renderModularBlocksToHTML(modularBlocks);
+      assistantFrameContent.innerHTML = sanitizeHtml(renderModularBlocksToHTML(modularBlocks));
     } else {
-      assistantFrameContent.innerHTML = formatAssistantResponseToCleanHTML(rawText);
+      assistantFrameContent.innerHTML = sanitizeHtml(formatAssistantResponseToCleanHTML(rawText));
     }
 
     // Render Grounded Evidence & Verification Panel

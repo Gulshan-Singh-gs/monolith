@@ -109,6 +109,7 @@ async def security_headers_middleware(request: Request, call_next):
     return response
 
 import re
+import hmac
 import html as html_lib
 import logging
 
@@ -154,6 +155,19 @@ async def lan_network_security_guard(request: Request, call_next):
     # Static assets always accessible so paired UI screens can render
     if path.startswith("/static") or path.startswith("/landing"):
         return await call_next(request)
+
+    # If MONOLITH_AUTH_TOKEN is configured in environment, require it for API calls
+    configured_token = os.environ.get("MONOLITH_AUTH_TOKEN")
+    if configured_token:
+        # Allow open public paths and static assets
+        if path not in _LAN_PUBLIC_PATHS and not path.startswith("/static") and not path.startswith("/landing"):
+            auth_header = request.headers.get("Authorization", "")
+            req_token = auth_header[7:].strip() if auth_header.startswith("Bearer ") else request.headers.get("X-Session-Token", "")
+            if not req_token or not hmac.compare_digest(req_token, configured_token):
+                return JSONResponse(
+                    status_code=401,
+                    content={"error": "Unauthorized: Invalid or missing MONOLITH_AUTH_TOKEN Bearer header.", "status": "DENIED"}
+                )
 
     # 1. Reject non-private external subnets if LAN mode is exposed
     if not lan_security_mgr.is_allowed_lan_ip(client_ip):
@@ -279,11 +293,15 @@ async def on_startup():
 
 @app.on_event("shutdown")
 async def on_shutdown():
-    """Cleanly unregister mDNS advertisement on server shutdown."""
+    """Cleanly unregister mDNS advertisement and close active browser sessions on server shutdown."""
     try:
         mdns_mgr.stop()
     except Exception as e:
         logger.warning(f"mDNS shutdown cleanup notice: {e}")
+    try:
+        await monolith_browser_mgr.close_all_sessions()
+    except Exception as e:
+        logger.warning(f"Browser sessions cleanup notice: {e}")
 
 
 class ConnectionManager:
@@ -2322,6 +2340,25 @@ async def open_download_folder():
 # ====================================================================
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
+    # Origin Header Validation (CSWSH Defense - MONO-SEC-01)
+    origin = websocket.headers.get("origin")
+    if origin:
+        origin_clean = origin.rstrip("/")
+        origin_pattern = r"^http://(127\.0\.0\.1|localhost|ai-workbench\.local|192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[0-1])\.\d+\.\d+)(:\d+)?$"
+        if not re.match(origin_pattern, origin_clean):
+            logger.warning(f"[CSWSH GUARD] Rejected WebSocket connection from unauthorized origin: {origin}")
+            await websocket.close(code=1008)
+            return
+
+    # Check MONOLITH_AUTH_TOKEN if configured
+    configured_token = os.environ.get("MONOLITH_AUTH_TOKEN")
+    if configured_token:
+        ws_token = websocket.query_params.get("token") or websocket.headers.get("x-auth-token")
+        if not ws_token or not hmac.compare_digest(ws_token, configured_token):
+            logger.warning("[AUTH GUARD] Rejected WebSocket connection: missing or invalid auth token.")
+            await websocket.close(code=1008)
+            return
+
     client_ip = websocket.client.host if websocket.client else "127.0.0.1"
     is_local = lan_security_mgr.is_local_client(client_ip)
 
@@ -2462,6 +2499,24 @@ async def websocket_dictation_endpoint(websocket: WebSocket):
     Accepts raw 16kHz 16-bit Mono PCM binary chunks or JSON control messages.
     Streams back real-time partial and final transcription results.
     """
+    # Origin Header Validation (CSWSH Defense)
+    origin = websocket.headers.get("origin")
+    if origin:
+        origin_clean = origin.rstrip("/")
+        origin_pattern = r"^http://(127\.0\.0\.1|localhost|ai-workbench\.local|192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[0-1])\.\d+\.\d+)(:\d+)?$"
+        if not re.match(origin_pattern, origin_clean):
+            logger.warning(f"[CSWSH GUARD] Rejected Dictation WebSocket connection from unauthorized origin: {origin}")
+            await websocket.close(code=1008)
+            return
+
+    configured_token = os.environ.get("MONOLITH_AUTH_TOKEN")
+    if configured_token:
+        ws_token = websocket.query_params.get("token") or websocket.headers.get("x-auth-token")
+        if not ws_token or not hmac.compare_digest(ws_token, configured_token):
+            logger.warning("[AUTH GUARD] Rejected Dictation WebSocket connection: missing or invalid auth token.")
+            await websocket.close(code=1008)
+            return
+
     client_ip = websocket.client.host if websocket.client else "127.0.0.1"
     is_local = lan_security_mgr.is_local_client(client_ip)
 
@@ -2946,9 +3001,8 @@ if __name__ == "__main__":
     network_mode = MODE_LAN if env_mode == MODE_LAN else MODE_LOCAL_ONLY
     lan_security_mgr.set_network_mode(network_mode)
 
-    # Bind socket to 0.0.0.0 so switching between LOCAL_ONLY and LAN works dynamically at runtime.
-    # Security is strictly governed by lan_network_security_guard middleware.
-    listen_host = "0.0.0.0"
+    # Default to 127.0.0.1 for local isolation. Only bind to 0.0.0.0 if LAN mode is explicitly enabled.
+    listen_host = "0.0.0.0" if network_mode == MODE_LAN else "127.0.0.1"
     port = find_free_port(8001, bind_host=listen_host)
     os.environ["PORT"] = str(port)
 

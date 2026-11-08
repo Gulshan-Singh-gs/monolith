@@ -30,6 +30,8 @@ import json
 import time
 import uuid
 import hashlib
+import socket
+import ipaddress
 import urllib.request
 import urllib.parse
 import logging
@@ -38,7 +40,7 @@ from pathlib import Path
 from typing import Dict, Any, List, Optional, Callable
 from pydantic import BaseModel, Field
 
-from playwright.async_api import async_playwright, Browser, BrowserContext, Page
+from playwright.async_api import async_playwright, Browser, BrowserContext, Page, Route, Request
 
 from cookie_vault import CookieVault
 from audit_ledger import audit_ledger
@@ -48,6 +50,58 @@ logger = logging.getLogger("MonolithBrowser")
 BASE_DIR = Path(__file__).resolve().parent
 DEFAULT_DOWNLOAD_DIR = BASE_DIR / "output" / "downloads"
 DEFAULT_DOWNLOAD_DIR.mkdir(parents=True, exist_ok=True)
+
+
+class SSRFSecurityViolation(Exception):
+    """Raised when an outbound URL resolves to a forbidden internal or private network target."""
+    pass
+
+
+def is_safe_destination(url: str, allow_loopback: bool = False) -> bool:
+    """
+    Validates outbound URLs to prevent Server-Side Request Forgery (SSRF) and local subnet pivoting.
+    Blocks private RFC-1918 ranges, link-local (169.254.x.x cloud metadata), loopbacks,
+    multicast, and non-routable targets.
+    """
+    try:
+        parsed = urllib.parse.urlparse(url)
+        if parsed.scheme not in ("http", "https"):
+            return False
+        hostname = parsed.hostname
+        if not hostname:
+            return False
+
+        # Direct string check for common cloud metadata and loopback hostnames
+        lowered_host = hostname.lower()
+        if lowered_host in ("localhost", "127.0.0.1", "::1", "metadata.google.internal") and not allow_loopback:
+            return False
+
+        addr_info = socket.getaddrinfo(hostname, None)
+        for _, _, _, _, sockaddr in addr_info:
+            ip_str = sockaddr[0]
+            ip = ipaddress.ip_address(ip_str)
+            if not allow_loopback and (ip.is_loopback or ip.is_private or ip.is_link_local or ip.is_multicast or ip.is_reserved or not ip.is_global):
+                return False
+        return True
+    except (socket.gaierror, ValueError, Exception) as err:
+        logger.warning(f"SSRF validation blocked URL {url}: {err}")
+        return False
+
+
+async def apply_ssrf_protection_to_context(context: BrowserContext, allow_loopback: bool = False):
+    """
+    Attaches Playwright network interception on all context routes, validating every destination IP.
+    Aborts requests directed to private/loopback/cloud-metadata addresses.
+    """
+    async def intercept_route(route: Route, request: Request):
+        target_url = request.url
+        if not is_safe_destination(target_url, allow_loopback=allow_loopback):
+            logger.warning(f"[SSRF GUARD] Blocked Playwright request to disallowed destination: {target_url}")
+            await route.abort("blockedbyclient")
+        else:
+            await route.continue_()
+
+    await context.route("**/*", intercept_route)
 
 
 class BrowserSessionState(str, Enum):
@@ -126,7 +180,11 @@ class MonolithBrowserEngine:
         """
         Launches an interactive, visible Headed Chromium browser window on the developer's desktop.
         Automatically injects pre-saved cookies from CookieVault for instant SSO.
+        Validates target URL against SSRF policy before opening.
         """
+        if not is_safe_destination(url):
+            raise SSRFSecurityViolation(f"Destination blocked by SSRF policy: {url}")
+
         session_id = f"BROWSER-{uuid.uuid4().hex[:6].upper()}"
         start_time = time.time()
 
@@ -141,6 +199,9 @@ class MonolithBrowserEngine:
                 viewport={"width": 1280, "height": 800},
                 user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
             )
+
+            # Apply SSRF egress protection to prevent subsequent in-page pivots
+            await apply_ssrf_protection_to_context(context)
 
             # Ingest session cookies if available
             target_domain = session_domain or url
@@ -238,31 +299,64 @@ class MonolithBrowserEngine:
         return self.named_sessions.get(session_id)
 
     async def close_session(self, session_id: str) -> Dict[str, Any]:
-        """Closes an active browser session cleanly."""
+        """Closes an active browser session cleanly and reaps all processes."""
         if session_id in self.named_sessions:
             self.named_sessions[session_id].state = BrowserSessionState.DISCONNECTED
             self.named_sessions[session_id].updated_at = time.time()
 
         if session_id in self.active_processes:
+            proc = self.active_processes.pop(session_id)
+            err_msg = None
             try:
-                proc = self.active_processes.pop(session_id)
-                await proc["browser"].close()
-                await proc["playwright"].stop()
-                return {"status": "SUCCESS", "message": f"Session {session_id} closed."}
+                if "page" in proc:
+                    await proc["page"].close()
+            except Exception:
+                pass
+            try:
+                if "context" in proc:
+                    await proc["context"].close()
+            except Exception:
+                pass
+            try:
+                if "browser" in proc:
+                    await proc["browser"].close()
             except Exception as e:
-                return {"status": "ERROR", "message": str(e)}
+                err_msg = str(e)
+            try:
+                if "playwright" in proc:
+                    await proc["playwright"].stop()
+            except Exception as e:
+                if not err_msg:
+                    err_msg = str(e)
+
+            if err_msg:
+                return {"status": "PARTIAL", "message": f"Session {session_id} cleaned with warning: {err_msg}"}
+            return {"status": "SUCCESS", "message": f"Session {session_id} closed."}
         return {"status": "ERROR", "message": "Session not found."}
+
+    async def close_all_sessions(self) -> int:
+        """Closes all active sessions and reaps any remaining Chromium child processes."""
+        closed = 0
+        for sid in list(self.active_processes.keys()):
+            await self.close_session(sid)
+            closed += 1
+        return closed
 
     async def inspect_ui_components(self, url: str, component_filter: str = "all") -> Dict[str, Any]:
         """
         Navigates to a UI component documentation or design gallery (e.g. shadcn/ui, Three.js, Tailwind),
         and extracts UI elements, component hierarchy, JSX snippets, and WebGL canvas info.
+        Validates target URL against SSRF policy.
         """
+        if not is_safe_destination(url):
+            raise SSRFSecurityViolation(f"Destination blocked by SSRF policy: {url}")
+
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=True)
             context = await browser.new_context(
                 user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
             )
+            await apply_ssrf_protection_to_context(context)
             page = await context.new_page()
 
             try:
@@ -389,6 +483,9 @@ class MonolithBrowserEngine:
         dest_dir.mkdir(parents=True, exist_ok=True)
 
         clean_input = pin_url_or_query.strip()
+        if (clean_input.startswith("http://") or clean_input.startswith("https://")) and not is_safe_destination(clean_input):
+            raise SSRFSecurityViolation(f"Destination blocked by SSRF policy: {clean_input}")
+
         update_progress("INITIALIZING", 10, "Initializing Playwright Chromium browser engine...")
 
         detected_video_urls: List[str] = []
@@ -403,6 +500,7 @@ class MonolithBrowserEngine:
                 user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
                 viewport={"width": 1280, "height": 800}
             )
+            await apply_ssrf_protection_to_context(context)
             page = await context.new_page()
 
             # Network Sniffer: Capture any direct .mp4 responses
@@ -507,6 +605,9 @@ class MonolithBrowserEngine:
             }
 
         target_video_url = detected_video_urls[0]
+        if not is_safe_destination(target_video_url):
+            raise SSRFSecurityViolation(f"Video download destination blocked by SSRF policy: {target_video_url}")
+
         update_progress("DOWNLOADING", 80, f"Streaming video bytes to local disk from {target_video_url[:60]}...")
 
         safe_filename = f"pinterest_video_{int(time.time())}_{uuid.uuid4().hex[:4]}.mp4"

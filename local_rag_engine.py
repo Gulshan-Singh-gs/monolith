@@ -293,7 +293,8 @@ class LocalRAGEngine:
                 "size": len(content),
                 "modified": p.stat().st_mtime,
                 "status": "Safe & Indexed",
-                "had_secrets": sec_check["has_secrets"]
+                "had_secrets": sec_check["has_secrets"],
+                "tenant_id": "default_tenant"
             }
             scanned_docs.append({"path": rel_path, "content": sanitized_text[:1000]})
 
@@ -321,8 +322,8 @@ class LocalRAGEngine:
             "memory_path": str(self.memory_file),
         }
 
-    def add_single_document(self, filename: str, content: str):
-        """Indexes an uploaded document or OCR extraction into RAG memory immediately."""
+    def add_single_document(self, filename: str, content: str, tenant_id: str = "default_tenant"):
+        """Indexes an uploaded document or OCR extraction into RAG memory immediately with tenant metadata."""
         if not content:
             return
         sec_check = check_confidentiality_and_motw(content, filename)
@@ -334,7 +335,8 @@ class LocalRAGEngine:
             "size": len(content),
             "modified": time.time(),
             "status": "Safe & Indexed (Uploaded)",
-            "had_secrets": sec_check["has_secrets"]
+            "had_secrets": sec_check["has_secrets"],
+            "tenant_id": tenant_id
         }
 
     async def _synthesize_insights(
@@ -378,10 +380,11 @@ class LocalRAGEngine:
         ]
         return default_summary, default_questions
 
-    async def query_knowledge(self, query: str, air_gap: bool = False) -> str:
+    async def query_knowledge(self, query: str, air_gap: bool = False, tenant_id: Optional[str] = None) -> str:
         """Answers plain English questions by searching indexed files.
 
         air_gap: when True, routes LLM inference to local Ollama only (TRG-001).
+        tenant_id: when provided, filters searches strictly to files owned by the specified tenant.
         """
         # Automatically sync any files sitting in output/uploads/
         self.sync_uploaded_files()
@@ -394,6 +397,11 @@ class LocalRAGEngine:
         all_docs = []
 
         for rel_path, comp_bytes in self.compressed_file_store.items():
+            meta = self.file_metadata.get(rel_path, {})
+            doc_tenant = meta.get("tenant_id", "default_tenant")
+            if tenant_id is not None and doc_tenant != tenant_id:
+                continue
+
             text = decompress_data(comp_bytes)
             text_lower = text.lower()
             word_matches = sum(1 for w in meaningful_words if w in text_lower)
@@ -532,10 +540,16 @@ class LocalRAGEngine:
             "Please upload relevant documents (PDF, DOCX, CSV, TXT) to index and query them locally."
         )
 
-    async def query_knowledge_with_verification(self, query: str, air_gap: bool = False) -> Dict[str, Any]:
+    async def query_knowledge_with_verification(
+        self,
+        query: str,
+        air_gap: bool = False,
+        tenant_id: Optional[str] = None
+    ) -> Dict[str, Any]:
         """
         Grounded Evidence & Verification Pipeline:
         Retrieve -> Evidence Extraction -> Secure Prompt (Injection Guard) -> Generate -> Verification.
+        Supports tenant-isolated search boundaries.
         Returns full structured dictionary:
         {
             "answer": str,
@@ -554,6 +568,11 @@ class LocalRAGEngine:
 
         scored_matches = []
         for rel_path, comp_bytes in self.compressed_file_store.items():
+            meta = self.file_metadata.get(rel_path, {})
+            doc_tenant = meta.get("tenant_id", "default_tenant")
+            if tenant_id is not None and doc_tenant != tenant_id:
+                continue
+
             text = decompress_data(comp_bytes)
             text_lower = text.lower()
             word_matches = sum(1 for w in meaningful_words if w in text_lower)
@@ -636,8 +655,8 @@ class LocalRAGEngine:
         except Exception as e:
             raw_answer = f"Based on local documents ({top_docs[0]['path']}):\n\n{top_docs[0]['content'][:1200]}"
 
-        # Run Deterministic AI Verification
-        verification_res = AIVerificationEngine.verify(raw_answer, evidence_bundle)
+        # Run Deterministic AI Verification offloaded to thread to keep asyncio event loop responsive
+        verification_res = await AIVerificationEngine.verify_async(raw_answer, evidence_bundle)
 
         # Append source citation footer if grounded
         if evidence_bundle.citations and verification_res.is_grounded:

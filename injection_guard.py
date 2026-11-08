@@ -38,6 +38,8 @@ class PromptInjectionGuard:
         (r"(?i)<\s*script[\s\S]*?>[\s\S]*?<\s*/\s*script\s*>", "SCRIPT_INJECTION"),
         (r"(?i)\b(?:curl|wget|nc|netcat|bash\s+-i|cmd\.exe|powershell)\b", "COMMAND_INJECTION_DIRECTIVE"),
         (r"(?i)\bcall\s+tool\s*[:=]\s*[a-z0-9_\-]+\b", "UNAUTHORIZED_TOOL_INVOCATION"),
+        (r"(?i)(?:assistant|system|user)\s*:\s*(?:you\s+must|new\s+instruction|override)", "ROLE_CONFUSION"),
+        (r"(?i)\[system_override\]|\[developer_mode\]|<\|im_start\|>|<\|im_end\|>", "DELIMITER_INJECTION"),
     ]
 
     # Explicit Allowlist of Permitted Sovereign Tool Operations
@@ -63,6 +65,8 @@ class PromptInjectionGuard:
     def sanitize_untrusted_content(cls, raw_content: str, source_label: str = "document") -> Tuple[str, bool, list]:
         """
         Neutralizes prompt injection directives in external content before embedding into LLM prompts.
+        Strips adversarial boundary tokens, neutralizes injection patterns, and wraps
+        inside hardened XML boundary delimiters.
         Returns: (sanitized_content, was_injection_detected, detected_threats)
         """
         if not raw_content:
@@ -70,6 +74,24 @@ class PromptInjectionGuard:
 
         sanitized = raw_content
         detected_threats = []
+
+        # Neutralize common special control tokens that could fool chat templates
+        control_tokens = ["<|im_start|>", "<|im_end|>", "<|endoftext|>", "[INST]", "[/INST]", "<<SYS>>", "<</SYS>>"]
+        for ct in control_tokens:
+            if ct in sanitized:
+                detected_threats.append("CONTROL_TOKEN_EVASION")
+                sanitized = sanitized.replace(ct, f"[NEUTRALIZED_TOKEN_{ct.strip('<>[]|')}]")
+
+        # Neutralize attempts to close the untrusted boundary tag
+        closing_tag = f"</untrusted_{source_label}_content>"
+        if closing_tag.lower() in sanitized.lower():
+            detected_threats.append("BOUNDARY_TAG_ESCAPE")
+            sanitized = re.sub(
+                rf"</\s*untrusted_{re.escape(source_label)}_content\s*>",
+                f"[ESCAPED_BOUNDARY_TAG]",
+                sanitized,
+                flags=re.IGNORECASE
+            )
 
         for pattern, threat_type in cls.INJECTION_PATTERNS:
             matches = list(re.finditer(pattern, sanitized))
